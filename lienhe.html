@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liên Hệ | FJ COMPUTER</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: #000000;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(20px);
+            border-radius: 80px;
+            z-index: 1000;
+            padding: 0.8rem 2rem;
+            border: 1px solid rgba(255,107,35,0.3);
+            transition: all 0.3s;
+        }
+
+        .navbar.scrolled {
+            top: 0;
+            left: 0;
+            right: 0;
+            border-radius: 0;
+            background: rgba(0, 0, 0, 0.95);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.3s;
+            font-size: 14px;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: #ff6b35;
+        }
+
+        .cart-icon {
+            position: relative;
+            cursor: pointer;
+            font-size: 22px;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -10px;
+            right: -12px;
+            background: #ff6b35;
+            color: white;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 20px;
+        }
+
+        /* Language Switcher */
+        .lang-switcher {
+            position: relative;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.05);
+            padding: 8px 14px;
+            border-radius: 40px;
+            transition: 0.3s;
+            border: 1px solid rgba(255,107,35,0.3);
+        }
+
+        .lang-switcher:hover {
+            background: rgba(255,107,35,0.2);
+            border-color: #ff6b35;
+        }
+
+        .lang-flag {
+            font-size: 18px;
+        }
+
+        .lang-text {
+            font-size: 13px;
+            font-weight: 600;
+            color: white;
+        }
+
+        .lang-dropdown {
+            position: absolute;
+            top: 50px;
+            right: 0;
+            background: rgba(10, 15, 26, 0.98);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            border: 1px solid rgba(255,107,35,0.3);
+            overflow: hidden;
+            min-width: 140px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s;
+            z-index: 100;
+        }
+
+        .lang-switcher:hover .lang-dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .lang-option {
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+            color: rgba(255,255,255,0.8);
+        }
+
+        .lang-option:hover {
+            background: rgba(255,107,35,0.2);
+            color: #ff6b35;
+        }
+
+        .avatar-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+
+        /* Contact Map Section */
+        .contact-map-section {
+            padding: 8rem 2rem 4rem;
+            background: linear-gradient(135deg, #05080f, #0a0f1a);
+            min-height: 100vh;
+        }
+
+        .contact-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .contact-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .contact-header h2 {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .contact-header p {
+            color: rgba(255,255,255,0.5);
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 2rem;
+        }
+
+        .contact-info-card {
+            background: rgba(255,255,255,0.03);
+            border-radius: 24px;
+            padding: 2rem;
+            border: 1px solid rgba(255,107,53,0.2);
+            transition: 0.3s;
+            text-align: center;
+        }
+
+        .contact-info-card:hover {
+            transform: translateY(-5px);
+            border-color: #ff6b35;
+            box-shadow: 0 10px 30px rgba(255,107,53,0.1);
+        }
+
+        .contact-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 28px;
+        }
+
+        .contact-info-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: white;
+        }
+
+        .contact-info-card p {
+            color: rgba(255,255,255,0.6);
+            line-height: 1.5;
+        }
+
+        .contact-info-card a {
+            color: #ff6b35;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .map-card {
+            background: rgba(255,255,255,0.03);
+            border-radius: 24px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255,107,53,0.2);
+            transition: 0.3s;
+        }
+
+        .map-card:hover {
+            border-color: #ff6b35;
+            box-shadow: 0 10px 30px rgba(255,107,53,0.1);
+        }
+
+        .map-container {
+            width: 100%;
+            height: 350px;
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .map-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .map-address {
+            padding: 1rem;
+            text-align: center;
+            color: rgba(255,255,255,0.7);
+            font-size: 0.9rem;
+        }
+
+        .map-address i {
+            color: #ff6b35;
+            margin-right: 8px;
+        }
+
+        .working-hours {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .working-hours p {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+        }
+
+        .working-hours .day {
+            color: rgba(255,255,255,0.5);
+        }
+
+        .working-hours .time {
+            color: #ff6b35;
+            font-weight: 500;
+        }
+
+        .back-home {
+            text-align: center;
+            margin-top: 3rem;
+        }
+
+        .back-home a {
+            color: rgba(255,255,255,0.5);
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .back-home a:hover {
+            color: #ff6b35;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: rgba(255,255,255,0.4);
+            border-top: 1px solid rgba(255,107,53,0.1);
+        }
+
+        @media (max-width: 768px) {
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+            .map-container {
+                height: 250px;
+            }
+            .navbar {
+                top: 10px;
+                left: 10px;
+                right: 10px;
+                padding: 0.5rem 1rem;
+            }
+            .nav-links a:not(.lang-switcher):not(.avatar-btn) {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo"><i class="fas fa-microchip"></i> FJ COMPUTER</a>
+            <div class="nav-links">
+                <a href="index.html" data-key="navHome">TRANG CHỦ</a>
+                <a href="sanpham.html" data-key="navProducts">SẢN PHẨM</a>
+                <a href="thanhvien.html" data-key="navTeam">THÀNH VIÊN</a>
+                <a href="lienhe.html" class="active" data-key="navContact">LIÊN HỆ</a>
+                <div class="cart-icon" onclick="toggleCart()">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count" id="cartCount">0</span>
+                </div>
+                <div class="lang-switcher">
+                    <span class="lang-flag" id="currentFlag">🇻🇳</span>
+                    <span class="lang-text" id="currentLangText">VI</span>
+                    <i class="fas fa-chevron-down" style="font-size: 10px;"></i>
+                    <div class="lang-dropdown">
+                        <div class="lang-option" onclick="switchLanguage('vi')">
+                            <span>🇻🇳</span>
+                            <span>Tiếng Việt</span>
+                        </div>
+                        <div class="lang-option" onclick="switchLanguage('en')">
+                            <span>🇬🇧</span>
+                            <span>English</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="avatar-btn" id="avatarBtn" onclick="toggleDashboard()">
+                    <span id="avatarText">👤</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contact & Map Section -->
+    <section class="contact-map-section">
+        <div class="contact-container">
+            <div class="contact-header">
+                <h2 data-key="contactTitle">📍 Liên Hệ Với Chúng Tôi</h2>
+                <p data-key="contactDesc">Chúng tôi luôn sẵn sàng hỗ trợ bạn 24/7</p>
+            </div>
+
+            <div class="contact-grid">
+                <!-- Email Card -->
+                <div class="contact-info-card">
+                    <div class="contact-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <h3 data-key="emailTitle">📧 Email</h3>
+                    <p>
+                        <strong data-key="emailSupport">Hỗ trợ khách hàng:</strong><br>
+                        <a href="mailto:support@fjcomputer.com">support@fjcomputer.com</a><br><br>
+                        <strong data-key="emailBusiness">Kinh doanh & Đối tác:</strong><br>
+                        <a href="mailto:business@fjcomputer.com">business@fjcomputer.com</a><br><br>
+                        <strong data-key="emailHR">Tuyển dụng:</strong><br>
+                        <a href="mailto:hr@fjcomputer.com">hr@fjcomputer.com</a>
+                    </p>
+                </div>
+
+                <!-- Phone Card -->
+                <div class="contact-info-card">
+                    <div class="contact-icon">
+                        <i class="fas fa-phone-alt"></i>
+                    </div>
+                    <h3 data-key="phoneTitle">📞 Hotline</h3>
+                    <p>
+                        <strong data-key="phoneSales">Tổng đài bán hàng:</strong><br>
+                        <a href="tel:+842812345678">1900 1234</a> - (028) 1234 5678<br><br>
+                        <strong data-key="phoneTech">Hỗ trợ kỹ thuật:</strong><br>
+                        <a href="tel:+842887654321">1900 5678</a> - (028) 8765 4321<br><br>
+                        <strong data-key="phoneComplaint">Khiếu nại & Góp ý:</strong><br>
+                        <a href="tel:+842899988877">1900 9999</a> - (028) 9998 8877
+                    </p>
+                    <div class="working-hours">
+                        <h4 style="color: white; font-size: 0.9rem; margin-bottom: 0.8rem;" data-key="workingHours">🕐 Giờ làm việc</h4>
+                        <p><span class="day" data-key="monFri">Thứ 2 - Thứ 6:</span><span class="time" data-key="timeNormal">8:00 - 21:00</span></p>
+                        <p><span class="day" data-key="satSun">Thứ 7 - Chủ Nhật:</span><span class="time" data-key="timeWeekend">9:00 - 18:00</span></p>
+                        <p><span class="day" data-key="holiday">Ngày lễ:</span><span class="time" data-key="timeHoliday">10:00 - 17:00</span></p>
+                    </div>
+                </div>
+
+                <!-- Address & Map Card -->
+                <div class="map-card">
+                    <div class="contact-icon" style="width: 60px; height: 60px; font-size: 24px;">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <h3 data-key="addressTitle">🏢 Hệ Thống Cửa Hàng</h3>
+                    <div class="map-container">
+                        <iframe 
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.4384034609333!2d106.7002693!3d10.7769094!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752f3f2a2b5d2d%3A0x5e8a7f6e8f9a3e2d!2zMjMxIE5ndXnhu4VuIFRo4bubaSDEkMOsbmggLVBoxrDhu51uZyBOZ3V54buFbiBUaOG7pWkgxJDDrG5oLCBQaMaw4budbmcgTeG7iW4gVGjDoG5oLCBUaMOgbmggcGjhu5EgSOG7kyBDaMOtIE1pbmgsIFZp4buHdCBOYW0!5e0!3m2!1svi!2s!4v1700000000000!5m2!1svi!2s" 
+                            allowfullscreen="" 
+                            loading="lazy">
+                        </iframe>
+                    </div>
+                    <div class="map-address">
+                        <i class="fas fa-map-pin"></i>
+                        <strong data-key="hqAddress">Trụ sở chính:</strong><br>
+                        <span data-key="hqAddressDetail">123 Nguyễn Huệ, Phường Bến Nghé, Quận 1, TP. Hồ Chí Minh</span>
+                    </div>
+                    <div class="map-address">
+                        <i class="fas fa-store"></i>
+                        <strong data-key="branchAddress">Chi nhánh Hà Nội:</strong><br>
+                        <span data-key="hnAddressDetail">456 Thái Hà, Đống Đa, Hà Nội</span>
+                    </div>
+                    <div class="map-address">
+                        <i class="fas fa-building"></i>
+                        <strong data-key="branch2Address">Chi nhánh Đà Nẵng:</strong><br>
+                        <span data-key="dnAddressDetail">789 Nguyễn Văn Linh, Thanh Khê, Đà Nẵng</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="back-home">
+                <a href="index.html"><i class="fas fa-arrow-left"></i> <span data-key="backHome">Quay lại trang chủ</span></a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p data-key="footerText">© 2025 FJ COMPUTER - PC gaming & máy trạm cao cấp. Bảo lưu mọi quyền.</p>
+    </footer>
+
+    <script>
+        // ========== LANGUAGE DATA ==========
+        const translations = {
+            vi: {
+                navHome: "TRANG CHỦ",
+                navProducts: "SẢN PHẨM",
+                navContact: "LIÊN HỆ",
+                navGaming: "GAMING",
+                navTeam: "THÀNH VIÊN",
+                contactTitle: "📍 Liên Hệ Với Chúng Tôi",
+                contactDesc: "Chúng tôi luôn sẵn sàng hỗ trợ bạn 24/7",
+                emailTitle: "📧 Email",
+                emailSupport: "Hỗ trợ khách hàng:",
+                emailBusiness: "Kinh doanh & Đối tác:",
+                emailHR: "Tuyển dụng:",
+                phoneTitle: "📞 Hotline",
+                phoneSales: "Tổng đài bán hàng:",
+                phoneTech: "Hỗ trợ kỹ thuật:",
+                phoneComplaint: "Khiếu nại & Góp ý:",
+                workingHours: "🕐 Giờ làm việc",
+                monFri: "Thứ 2 - Thứ 6:",
+                satSun: "Thứ 7 - Chủ Nhật:",
+                holiday: "Ngày lễ:",
+                timeNormal: "8:00 - 21:00",
+                timeWeekend: "9:00 - 18:00",
+                timeHoliday: "10:00 - 17:00",
+                addressTitle: "🏢 Hệ Thống Cửa Hàng",
+                hqAddress: "Trụ sở chính:",
+                branchAddress: "Chi nhánh Hà Nội:",
+                branch2Address: "Chi nhánh Đà Nẵng:",
+                hqAddressDetail: "123 Nguyễn Huệ, Phường Bến Nghé, Quận 1, TP. Hồ Chí Minh",
+                hnAddressDetail: "456 Thái Hà, Đống Đa, Hà Nội",
+                dnAddressDetail: "789 Nguyễn Văn Linh, Thanh Khê, Đà Nẵng",
+                backHome: "Quay lại trang chủ",
+                footerText: "© 2025 FJ COMPUTER - PC gaming & máy trạm cao cấp. Bảo lưu mọi quyền.",
+                cartEmpty: "Giỏ hàng trống",
+                total: "Tổng cộng"
+            },
+            en: {
+                navHome: "HOME",
+                navProducts: "PRODUCTS",
+                navContact: "CONTACT",
+                navGaming: "GAMING",
+                navTeam: "TEAM",
+                contactTitle: "📍 Contact Us",
+                contactDesc: "We are always ready to support you 24/7",
+                emailTitle: "📧 Email",
+                emailSupport: "Customer Support:",
+                emailBusiness: "Business & Partnerships:",
+                emailHR: "Careers / HR:",
+                phoneTitle: "📞 Hotline",
+                phoneSales: "Sales Hotline:",
+                phoneTech: "Technical Support:",
+                phoneComplaint: "Complaints & Feedback:",
+                workingHours: "🕐 Working Hours",
+                monFri: "Monday - Friday:",
+                satSun: "Saturday - Sunday:",
+                holiday: "Public Holidays:",
+                timeNormal: "8:00 AM - 9:00 PM",
+                timeWeekend: "9:00 AM - 6:00 PM",
+                timeHoliday: "10:00 AM - 5:00 PM",
+                addressTitle: "🏢 Store Locations",
+                hqAddress: "Headquarters:",
+                branchAddress: "Hanoi Branch:",
+                branch2Address: "Da Nang Branch:",
+                hqAddressDetail: "123 Nguyen Hue Street, Ben Nghe Ward, District 1, Ho Chi Minh City",
+                hnAddressDetail: "456 Thai Ha Street, Dong Da District, Hanoi",
+                dnAddressDetail: "789 Nguyen Van Linh Street, Thanh Khe District, Da Nang",
+                backHome: "Back to Home",
+                footerText: "© 2025 FJ COMPUTER - Premium Gaming & Workstation PCs. All rights reserved.",
+                cartEmpty: "Cart is empty",
+                total: "Total"
+            }
+        };
+
+        let currentLang = localStorage.getItem('language') || 'vi';
+        let cart = [];
+        let currentUser = null;
+
+        // Switch language function
+        function switchLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('language', lang);
+            
+            // Update all elements with data-key attribute
+            document.querySelectorAll('[data-key]').forEach(el => {
+                const key = el.getAttribute('data-key');
+                if (translations[lang][key]) {
+                    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                        el.placeholder = translations[lang][key];
+                    } else if (el.tagName === 'SPAN' || el.tagName === 'A' || el.tagName === 'H2' || el.tagName === 'H3' || el.tagName === 'H4' || el.tagName === 'P' || el.tagName === 'DIV' || el.tagName === 'STRONG') {
+                        el.textContent = translations[lang][key];
+                    } else {
+                        el.textContent = translations[lang][key];
+                    }
+                }
+            });
+            
+            // Update flag
+            const currentFlag = document.getElementById('currentFlag');
+            const currentLangText = document.getElementById('currentLangText');
+            if (lang === 'vi') {
+                currentFlag.textContent = '🇻🇳';
+                currentLangText.textContent = 'VI';
+            } else {
+                currentFlag.textContent = '🇬🇧';
+                currentLangText.textContent = 'EN';
+            }
+            
+            showToast(translations[lang].contactDesc, 'success');
+        }
+
+        function toggleCart() {
+            alert(translations[currentLang].cartEmpty);
+        }
+
+        function toggleDashboard() {
+            window.location.href = 'login.html';
+        }
+
+        function showToast(message, type) {
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.style.cssText = 'position:fixed;bottom:30px;right:30px;background:#1a1a2e;border-left:4px solid #ff6b35;padding:1rem 1.5rem;border-radius:12px;z-index:2000;color:white;animation:slideInRight 0.3s;';
+            toast.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-info-circle'}" style="margin-right:10px;color:#ff6b35;"></i>${message}`;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        // Load user from storage
+        const savedUser = localStorage.getItem('currentUser');
+        if (savedUser) {
+            try {
+                currentUser = JSON.parse(savedUser);
+                document.getElementById('avatarText').innerHTML = currentUser.username.charAt(0).toUpperCase();
+            } catch(e) {}
+        }
+
+        // Load saved language
+        const savedLang = localStorage.getItem('language');
+        if (savedLang) {
+            switchLanguage(savedLang);
+        } else {
+            switchLanguage('vi');
+        }
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Add toast animation style
+        const style = document.createElement('style');
+        style.textContent = `@keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } } .toast { animation: slideInRight 0.3s ease; }`;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

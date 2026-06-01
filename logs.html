@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Logs | FJ COMPUTER</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: #0a0a0f;
+            color: #fff;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            margin-bottom: 2rem;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .header p {
+            color: rgba(255,255,255,0.5);
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+            border-radius: 24px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255,107,53,0.2);
+            transition: 0.3s;
+        }
+
+        .stat-card:hover {
+            border-color: #ff6b35;
+            transform: translateY(-3px);
+        }
+
+        .stat-icon {
+            font-size: 32px;
+            color: #ff6b35;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: white;
+        }
+
+        .stat-label {
+            color: rgba(255,255,255,0.5);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 0.5rem;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            color: rgba(255,255,255,0.5);
+            padding: 0.8rem 1.5rem;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.3s;
+            border-radius: 30px;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            color: white;
+        }
+
+        /* Tables */
+        .table-container {
+            background: rgba(255,255,255,0.03);
+            border-radius: 20px;
+            overflow-x: auto;
+            border: 1px solid rgba(255,107,53,0.2);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            text-align: left;
+            padding: 1rem;
+            background: rgba(255,107,53,0.1);
+            color: #ff6b35;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 0.8rem 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            color: rgba(255,255,255,0.8);
+        }
+
+        tr:hover td {
+            background: rgba(255,107,53,0.05);
+        }
+
+        .badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        .badge.success {
+            background: rgba(0,255,0,0.2);
+            color: #00ff88;
+        }
+
+        .badge.failed {
+            background: rgba(255,0,0,0.2);
+            color: #ff4444;
+        }
+
+        /* Actions */
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,107,53,0.3);
+            border-radius: 40px;
+            color: white;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            background: rgba(255,107,53,0.2);
+            border-color: #ff6b35;
+        }
+
+        .btn-danger {
+            border-color: rgba(255,68,68,0.3);
+        }
+
+        .btn-danger:hover {
+            background: rgba(255,68,68,0.2);
+            border-color: #ff4444;
+        }
+
+        /* User Table Section */
+        .section-title {
+            margin: 2rem 0 1rem;
+            font-size: 1.3rem;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: rgba(255,255,255,0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-chart-line"></i> FJ COMPUTER - Admin Dashboard</h1>
+            <p>Quản lý người dùng, theo dõi lịch sử đăng nhập và đăng ký</p>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="stats-grid" id="statsGrid">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-users"></i></div>
+                <div class="stat-number" id="totalUsers">0</div>
+                <div class="stat-label">Tổng số người dùng</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-sign-in-alt"></i></div>
+                <div class="stat-number" id="totalLogins">0</div>
+                <div class="stat-label">Tổng số lần đăng nhập</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+                <div class="stat-number" id="successLogins">0</div>
+                <div class="stat-label">Đăng nhập thành công</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-times-circle"></i></div>
+                <div class="stat-number" id="failedLogins">0</div>
+                <div class="stat-label">Đăng nhập thất bại</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-user-plus"></i></div>
+                <div class="stat-number" id="totalRegisters">0</div>
+                <div class="stat-label">Tổng số đăng ký</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-calendar-day"></i></div>
+                <div class="stat-number" id="todayCount">0</div>
+                <div class="stat-label">Hôm nay</div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="showTab('users')"><i class="fas fa-users"></i> Người dùng</button>
+            <button class="tab-btn" onclick="showTab('login')"><i class="fas fa-sign-in-alt"></i> Login Logs</button>
+            <button class="tab-btn" onclick="showTab('register')"><i class="fas fa-user-plus"></i> Register Logs</button>
+        </div>
+
+        <!-- Users Table -->
+        <div id="usersTab" class="table-container">
+            <table id="usersTable">
+                <thead>
+                    <tr><th>ID</th><th>Tên đăng nhập</th><th>Email</th><th>Điểm thưởng</th><th>Ngày tạo</th><th>Thao tác</th></tr>
+                </thead>
+                <tbody id="usersTableBody">
+                    <tr><td colspan="6" class="empty-state">📭 Chưa có người dùng nào</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Login Logs Table -->
+        <div id="loginTab" class="table-container" style="display: none;">
+            <table>
+                <thead><tr><th>Thời gian</th><th>Tên đăng nhập</th><th>Trạng thái</th><th>IP (Mock)</th></tr></thead>
+                <tbody id="loginLogsBody"><tr><td colspan="4" class="empty-state">📭 Chưa có log đăng nhập</td></tr></tbody>
+            </table>
+        </div>
+
+        <!-- Register Logs Table -->
+        <div id="registerTab" class="table-container" style="display: none;">
+            <table>
+                <thead><tr><th>Thời gian</th><th>Tên đăng nhập</th><th>Email</th><th>IP (Mock)</th></tr></thead>
+                <tbody id="registerLogsBody"><tr><td colspan="4" class="empty-state">📭 Chưa có log đăng ký</td></tr></tbody>
+            </table>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="btn" onclick="exportData()"><i class="fas fa-download"></i> Export Data (JSON)</button>
+            <button class="btn btn-danger" onclick="clearAllLogs()"><i class="fas fa-trash"></i> Xóa toàn bộ logs</button>
+            <button class="btn" onclick="refreshData()"><i class="fas fa-sync-alt"></i> Làm mới</button>
+        </div>
+    </div>
+
+    <script>
+        // Keys for localStorage
+        const STORAGE_KEYS = {
+            USERS: 'fj_users',
+            LOGIN_LOGS: 'fj_login_logs',
+            REGISTER_LOGS: 'fj_register_logs'
+        };
+
+        // Helper: Get data from localStorage
+        function getData(key) {
+            const data = localStorage.getItem(key);
+            return data ? JSON.parse(data) : [];
+        }
+
+        // Helper: Save data to localStorage
+        function saveData(key, data) {
+            localStorage.setItem(key, JSON.stringify(data));
+        }
+
+        // Add login log
+        function addLoginLog(username, success) {
+            const logs = getData(STORAGE_KEYS.LOGIN_LOGS);
+            logs.push({
+                id: Date.now(),
+                username: username,
+                success: success,
+                timestamp: new Date().toISOString(),
+                ip: '127.0.0.1' // Mock IP
+            });
+            saveData(STORAGE_KEYS.LOGIN_LOGS, logs);
+        }
+
+        // Add register log
+        function addRegisterLog(username, email) {
+            const logs = getData(STORAGE_KEYS.REGISTER_LOGS);
+            logs.push({
+                id: Date.now(),
+                username: username,
+                email: email,
+                timestamp: new Date().toISOString(),
+                ip: '127.0.0.1'
+            });
+            saveData(STORAGE_KEYS.REGISTER_LOGS, logs);
+        }
+
+        // Update stats
+        function updateStats() {
+            const users = getData(STORAGE_KEYS.USERS);
+            const loginLogs = getData(STORAGE_KEYS.LOGIN_LOGS);
+            const registerLogs = getData(STORAGE_KEYS.REGISTER_LOGS);
+            
+            const today = new Date().toDateString();
+            const todayLogins = loginLogs.filter(l => new Date(l.timestamp).toDateString() === today).length;
+            const todayRegisters = registerLogs.filter(r => new Date(r.timestamp).toDateString() === today).length;
+            
+            document.getElementById('totalUsers').innerText = users.length;
+            document.getElementById('totalLogins').innerText = loginLogs.length;
+            document.getElementById('successLogins').innerText = loginLogs.filter(l => l.success).length;
+            document.getElementById('failedLogins').innerText = loginLogs.filter(l => !l.success).length;
+            document.getElementById('totalRegisters').innerText = registerLogs.length;
+            document.getElementById('todayCount').innerText = todayLogins + todayRegisters;
+        }
+
+        // Render users table
+        function renderUsers() {
+            const users = getData(STORAGE_KEYS.USERS);
+            const tbody = document.getElementById('usersTableBody');
+            
+            if (users.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="empty-state">📭 Chưa có người dùng nào</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = users.map((user, index) => `
+                <tr>
+                    <td>${index + 1}</td>
+                    <td><i class="fas fa-user-circle" style="color:#ff6b35"></i> ${user.username}</td>
+                    <td>${user.email}</td>
+                    <td>${user.loyaltyPoints || 0}</td>
+                    <td>${new Date(user.createdAt).toLocaleDateString('vi-VN')}</td>
+                    <td><button class="btn" style="padding:4px 12px; font-size:12px" onclick="deleteUser('${user.username}')"><i class="fas fa-trash"></i> Xóa</button></td>
+                </tr>
+            `).join('');
+        }
+
+        // Render login logs
+        function renderLoginLogs() {
+            const logs = getData(STORAGE_KEYS.LOGIN_LOGS);
+            const tbody = document.getElementById('loginLogsBody');
+            
+            if (logs.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" class="empty-state">📭 Chưa có log đăng nhập</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = logs.slice().reverse().map(log => `
+                <tr>
+                    <td>${new Date(log.timestamp).toLocaleString('vi-VN')}</td>
+                    <td>${log.username}</td>
+                    <td><span class="badge ${log.success ? 'success' : 'failed'}">${log.success ? '✓ Thành công' : '✗ Thất bại'}</span></td>
+                    <td>${log.ip}</td>
+                </tr>
+            `).join('');
+        }
+
+        // Render register logs
+        function renderRegisterLogs() {
+            const logs = getData(STORAGE_KEYS.REGISTER_LOGS);
+            const tbody = document.getElementById('registerLogsBody');
+            
+            if (logs.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" class="empty-state">📭 Chưa có log đăng ký</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = logs.slice().reverse().map(log => `
+                <tr>
+                    <td>${new Date(log.timestamp).toLocaleString('vi-VN')}</td>
+                    <td>${log.username}</td>
+                    <td>${log.email}</td>
+                    <td>${log.ip}</td>
+                </tr>
+            `).join('');
+        }
+
+        // Delete user
+        function deleteUser(username) {
+            if (confirm(`Xóa người dùng "${username}"?`)) {
+                let users = getData(STORAGE_KEYS.USERS);
+                users = users.filter(u => u.username !== username);
+                saveData(STORAGE_KEYS.USERS, users);
+                refreshData();
+                alert(`Đã xóa user: ${username}`);
+            }
+        }
+
+        // Clear all logs
+        function clearAllLogs() {
+            if (confirm('⚠️ Xóa TẤT CẢ logs và người dùng? Hành động này không thể hoàn tác!')) {
+                saveData(STORAGE_KEYS.USERS, []);
+                saveData(STORAGE_KEYS.LOGIN_LOGS, []);
+                saveData(STORAGE_KEYS.REGISTER_LOGS, []);
+                refreshData();
+                alert('Đã xóa toàn bộ dữ liệu!');
+            }
+        }
+
+        // Export data
+        function exportData() {
+            const data = {
+                users: getData(STORAGE_KEYS.USERS),
+                loginLogs: getData(STORAGE_KEYS.LOGIN_LOGS),
+                registerLogs: getData(STORAGE_KEYS.REGISTER_LOGS),
+                exportedAt: new Date().toISOString()
+            };
+            const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `fj_logs_${Date.now()}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Refresh all data
+        function refreshData() {
+            updateStats();
+            renderUsers();
+            renderLoginLogs();
+            renderRegisterLogs();
+        }
+
+        // Tab switching
+        function showTab(tab) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            document.getElementById('usersTab').style.display = tab === 'users' ? 'block' : 'none';
+            document.getElementById('loginTab').style.display = tab === 'login' ? 'block' : 'none';
+            document.getElementById('registerTab').style.display = tab === 'register' ? 'block' : 'none';
+        }
+
+        // Initialize dashboard and sync with login/register pages
+        function initDashboard() {
+            refreshData();
+            
+            // Override the original register function to add logs
+            const originalRegister = window.handleRegister;
+            if (typeof originalRegister === 'function') {
+                window.handleRegister = async function() {
+                    const username = document.getElementById('regUsername')?.value.trim();
+                    const email = document.getElementById('regEmail')?.value.trim();
+                    const result = await originalRegister();
+                    if (result !== false) {
+                        addRegisterLog(username, email);
+                    }
+                    return result;
+                };
+            }
+        }
+
+        // Sync: This function should be called from login.html and register.html
+        window.fjLogLogin = addLoginLog;
+        window.fjLogRegister = addRegisterLog;
+        
+        initDashboard();
+        
+        // Auto-refresh every 5 seconds
+        setInterval(refreshData, 5000);
+    </script>
+</body>
+</html>

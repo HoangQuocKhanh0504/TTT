@@ -1,0 +1,1920 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FJ COMPUTER | Ultimate Gaming Experience</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23ff6b35'/%3E%3Ctext x='50' y='67' font-size='50' text-anchor='middle' fill='white'%3EFJ%3C/text%3E%3C/svg%3E">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: #000000;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* 3D Canvas Background */
+        #canvas-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(20px);
+            border-radius: 80px;
+            z-index: 1000;
+            padding: 0.8rem 2rem;
+            border: 1px solid rgba(255,107,35,0.3);
+            transition: all 0.3s;
+        }
+
+        .navbar.scrolled {
+            top: 0;
+            left: 0;
+            right: 0;
+            border-radius: 0;
+            background: rgba(0, 0, 0, 0.95);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.3s;
+            font-size: 14px;
+        }
+
+        .nav-links a:hover {
+            color: #ff6b35;
+        }
+
+        .cart-icon {
+            position: relative;
+            cursor: pointer;
+            font-size: 22px;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -10px;
+            right: -12px;
+            background: #ff6b35;
+            color: white;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 20px;
+        }
+
+        /* Language Switcher */
+        .lang-switcher {
+            position: relative;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.05);
+            padding: 8px 14px;
+            border-radius: 40px;
+            transition: 0.3s;
+            border: 1px solid rgba(255,107,35,0.3);
+        }
+
+        .lang-switcher:hover {
+            background: rgba(255,107,35,0.2);
+            border-color: #ff6b35;
+        }
+
+        .lang-flag {
+            font-size: 18px;
+        }
+
+        .lang-text {
+            font-size: 13px;
+            font-weight: 600;
+            color: white;
+        }
+
+        .lang-dropdown {
+            position: absolute;
+            top: 50px;
+            right: 0;
+            background: rgba(10, 15, 26, 0.98);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            border: 1px solid rgba(255,107,35,0.3);
+            overflow: hidden;
+            min-width: 140px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s;
+            z-index: 100;
+        }
+
+        .lang-switcher:hover .lang-dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .lang-option {
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+            color: rgba(255,255,255,0.8);
+        }
+
+        .lang-option:hover {
+            background: rgba(255,107,35,0.2);
+            color: #ff6b35;
+        }
+
+        .lang-option.active {
+            background: rgba(255,107,35,0.3);
+            color: #ff6b35;
+        }
+
+        /* Avatar Button */
+        .avatar-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 18px;
+            border: 2px solid rgba(255,255,255,0.3);
+            overflow: hidden;
+            color: white;
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            box-shadow: 0 0 10px rgba(255,107,35,0.3);
+        }
+
+        .avatar-btn span {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        .avatar-btn img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .avatar-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(255,107,35,0.5);
+        }
+
+        /* User Dashboard Card */
+        .user-dashboard {
+            position: fixed;
+            top: 90px;
+            right: 20px;
+            width: 380px;
+            background: linear-gradient(135deg, #0a0f1a, #06080f);
+            backdrop-filter: blur(20px);
+            border-radius: 28px;
+            border: 1px solid rgba(255,107,53,0.4);
+            z-index: 1001;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateX(50px) scale(0.95);
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+            overflow: hidden;
+        }
+
+        .user-dashboard.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(0) scale(1);
+        }
+
+        .dashboard-cover {
+            height: 80px;
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            border-radius: 28px 28px 0 0;
+        }
+
+        .dashboard-avatar-wrapper {
+            display: flex;
+            justify-content: center;
+            margin-top: -40px;
+            margin-bottom: 16px;
+        }
+
+        .dashboard-avatar-large {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            border: 4px solid #0a0f1a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 38px;
+            font-weight: 800;
+            overflow: hidden;
+            cursor: pointer;
+            transition: 0.3s;
+            color: white;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            position: relative;
+        }
+
+        .dashboard-avatar-large:hover {
+            transform: scale(1.05);
+        }
+
+        .dashboard-avatar-large img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .dashboard-avatar-large span {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        .edit-avatar-icon {
+            position: absolute;
+            bottom: 2px;
+            right: 2px;
+            background: #ff6b35;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            cursor: pointer;
+            border: 2px solid #0a0f1a;
+            color: white;
+            z-index: 3;
+        }
+
+        .dashboard-body {
+            padding: 0 24px 24px;
+            text-align: center;
+        }
+
+        .dashboard-name {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: white;
+        }
+
+        .dashboard-email {
+            color: rgba(255,255,255,0.5);
+            font-size: 0.75rem;
+            margin-bottom: 12px;
+            word-break: break-all;
+        }
+
+        .member-tier {
+            display: inline-block;
+            background: rgba(255,107,53,0.2);
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            color: #ff6b35;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .stat-item {
+            background: rgba(255,255,255,0.05);
+            padding: 14px 8px;
+            border-radius: 16px;
+            text-align: center;
+            transition: 0.3s;
+        }
+
+        .stat-item:hover {
+            background: rgba(255,107,53,0.1);
+            transform: translateY(-3px);
+        }
+
+        .stat-icon {
+            font-size: 24px;
+            color: #ff6b35;
+            margin-bottom: 8px;
+        }
+
+        .stat-number {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .stat-label {
+            font-size: 0.65rem;
+            color: rgba(255,255,255,0.5);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .dashboard-menu {
+            border-top: 1px solid rgba(255,255,255,0.08);
+            padding-top: 16px;
+        }
+
+        .menu-item {
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            cursor: pointer;
+            border-radius: 14px;
+            transition: 0.3s;
+            color: rgba(255,255,255,0.8);
+            font-size: 14px;
+        }
+
+        .menu-item:hover {
+            background: rgba(255,107,53,0.1);
+            color: #ff6b35;
+        }
+
+        .menu-item i {
+            width: 24px;
+            font-size: 18px;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .hero-text h1 {
+            font-size: 4.5rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            color: white;
+        }
+
+        .hero-text h1 span {
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .hero-text p {
+            color: rgba(255,255,255,0.6);
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        .hero-image img {
+            width: 100%;
+            animation: float 3s ease-in-out infinite;
+            filter: drop-shadow(0 0 30px rgba(255,107,35,0.3));
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .btn-primary {
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            border: none;
+            border-radius: 50px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: 0.3s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255,107,35,0.4);
+        }
+
+        /* Products Section */
+        .products-section {
+            padding: 5rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .section-title {
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            color: white;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+
+        .product-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 24px;
+            overflow: hidden;
+            transition: all 0.4s;
+            border: 1px solid rgba(255,107,53,0.2);
+            cursor: pointer;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            border-color: #ff6b35;
+            box-shadow: 0 20px 40px rgba(255,107,53,0.2);
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: #ff6b35;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            z-index: 1;
+        }
+
+        .product-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+
+        .product-info {
+            padding: 1.5rem;
+        }
+
+        .product-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: white;
+        }
+
+        .product-specs {
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.5);
+            margin-bottom: 1rem;
+        }
+
+        .product-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #ff6b35;
+        }
+
+        .add-to-cart {
+            width: 100%;
+            padding: 0.8rem;
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 1rem;
+            transition: 0.3s;
+        }
+
+        .add-to-cart:hover {
+            transform: scale(1.02);
+        }
+
+        /* Cart Sidebar */
+        .cart-sidebar {
+            position: fixed;
+            top: 0;
+            right: -500px;
+            width: 500px;
+            height: 100vh;
+            background: #0a0f1a;
+            z-index: 1002;
+            transition: 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cart-sidebar.open {
+            right: 0;
+        }
+
+        .cart-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            justify-content: space-between;
+            color: white;
+        }
+
+        .cart-items {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+
+        .cart-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            margin-bottom: 1rem;
+        }
+
+        .cart-footer {
+            padding: 1.5rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .cart-total {
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        /* Modal Chi Tiết Sản Phẩm */
+        .product-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            backdrop-filter: blur(20px);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .product-modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #0a0f1a, #05080f);
+            border-radius: 32px;
+            max-width: 1000px;
+            width: 90%;
+            max-height: 85vh;
+            overflow-y: auto;
+            border: 1px solid rgba(255,107,53,0.3);
+            animation: modalIn 0.3s;
+        }
+
+        @keyframes modalIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .modal-header {
+            position: relative;
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .close-modal {
+            font-size: 28px;
+            cursor: pointer;
+            color: rgba(255,255,255,0.5);
+            transition: 0.3s;
+        }
+
+        .close-modal:hover {
+            color: #ff6b35;
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .modal-image {
+            width: 100%;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .modal-image img {
+            width: 100%;
+            height: auto;
+            border-radius: 20px;
+        }
+
+        .modal-info h3 {
+            color: #ff6b35;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .spec-list {
+            list-style: none;
+            margin-bottom: 1.5rem;
+        }
+
+        .spec-list li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            display: flex;
+            gap: 1rem;
+        }
+
+        .spec-icon {
+            width: 30px;
+            color: #ff6b35;
+        }
+
+        .component-section {
+            margin-top: 1.5rem;
+            background: rgba(255,255,255,0.03);
+            border-radius: 20px;
+            padding: 1rem;
+        }
+
+        .component-title {
+            font-weight: 700;
+            color: #ff6b35;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .component-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.8rem;
+        }
+
+        .component-item {
+            background: rgba(255,255,255,0.05);
+            padding: 0.8rem;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .component-item i {
+            font-size: 24px;
+            color: #ff6b35;
+            margin-bottom: 0.3rem;
+        }
+
+        .component-name {
+            font-size: 0.7rem;
+            color: rgba(255,255,255,0.7);
+        }
+
+        .component-desc {
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .modal-price {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #ff6b35;
+            margin: 1rem 0;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .modal-buy-btn {
+            flex: 1;
+            padding: 0.8rem;
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            border: none;
+            border-radius: 30px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* Contact Map Section */
+        .contact-map-section {
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, #05080f, #0a0f1a);
+            position: relative;
+            z-index: 1;
+        }
+
+        .contact-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .contact-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .contact-header h2 {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .contact-header p {
+            color: rgba(255,255,255,0.5);
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .contact-info-card {
+            background: rgba(255,255,255,0.03);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(255,107,53,0.2);
+            transition: 0.3s;
+            text-align: center;
+        }
+
+        .contact-info-card:hover {
+            transform: translateY(-5px);
+            border-color: #ff6b35;
+            box-shadow: 0 10px 30px rgba(255,107,53,0.1);
+        }
+
+        .contact-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 28px;
+        }
+
+        .contact-info-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: white;
+        }
+
+        .contact-info-card p {
+            color: rgba(255,255,255,0.6);
+            line-height: 1.5;
+            word-break: break-all;
+        }
+
+        .contact-info-card a {
+            color: #ff6b35;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .map-card {
+            background: rgba(255,255,255,0.03);
+            border-radius: 20px;
+            padding: 1rem;
+            border: 1px solid rgba(255,107,53,0.2);
+            transition: 0.3s;
+        }
+
+        .map-card:hover {
+            border-color: #ff6b35;
+            box-shadow: 0 10px 30px rgba(255,107,53,0.1);
+        }
+
+        .map-container {
+            width: 100%;
+            height: 400px;
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .map-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .map-address {
+            padding: 1rem;
+            text-align: center;
+            color: rgba(255,255,255,0.7);
+            font-size: 0.9rem;
+        }
+
+        .map-address i {
+            color: #ff6b35;
+            margin-right: 8px;
+        }
+
+        .working-hours {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .working-hours p {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+        }
+
+        .working-hours .day {
+            color: rgba(255,255,255,0.5);
+        }
+
+        .working-hours .time {
+            color: #ff6b35;
+            font-weight: 500;
+        }
+
+        /* Auth Modal */
+        .auth-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            backdrop-filter: blur(30px);
+            z-index: 1003;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .auth-modal.active {
+            display: flex;
+        }
+
+        .auth-card {
+            background: linear-gradient(135deg, #0a0f1a, #05080f);
+            border-radius: 40px;
+            padding: 2.5rem;
+            width: 90%;
+            max-width: 480px;
+            border: 1px solid rgba(255,107,53,0.3);
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .auth-header h2 {
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+
+        .auth-header p {
+            color: rgba(255,255,255,0.5);
+        }
+
+        .auth-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            background: rgba(255,255,255,0.05);
+            padding: 0.3rem;
+            border-radius: 60px;
+        }
+
+        .auth-tab {
+            flex: 1;
+            padding: 0.8rem;
+            background: transparent;
+            border: none;
+            color: rgba(255,255,255,0.5);
+            cursor: pointer;
+            border-radius: 50px;
+            font-weight: 600;
+        }
+
+        .auth-tab.active {
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            color: white;
+        }
+
+        .auth-form {
+            display: none;
+        }
+
+        .auth-form.active {
+            display: block;
+        }
+
+        .auth-input {
+            width: 100%;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            color: white;
+            font-size: 1rem;
+        }
+
+        .auth-input:focus {
+            outline: none;
+            border-color: #ff6b35;
+        }
+
+        .auth-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            border: none;
+            border-radius: 16px;
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .close-modal-icon {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 24px;
+            cursor: pointer;
+            color: rgba(255,255,255,0.5);
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, #1a1a2e, #0a0a15);
+            border-left: 4px solid #ff6b35;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            z-index: 1004;
+            animation: slideInRight 0.3s;
+            color: white;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem;
+            color: rgba(255,255,255,0.5);
+            border-top: 1px solid rgba(255,107,53,0.2);
+        }
+
+        /* Avatar Modal */
+        .avatar-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            backdrop-filter: blur(20px);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .avatar-modal.active {
+            display: flex;
+        }
+
+        .avatar-modal-content {
+            background: linear-gradient(135deg, #0a0f1a, #05080f);
+            border-radius: 32px;
+            padding: 2rem;
+            width: 90%;
+            max-width: 500px;
+            border: 1px solid rgba(255,107,53,0.3);
+            animation: modalIn 0.3s;
+        }
+
+        .avatar-preview {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .avatar-preview-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            font-weight: 800;
+            overflow: hidden;
+            color: white;
+        }
+
+        .avatar-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .avatar-option-btn {
+            padding: 1rem;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            color: white;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .avatar-option-btn:hover {
+            background: rgba(255,107,53,0.2);
+            border-color: #ff6b35;
+        }
+
+        .color-options {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin: 1rem 0;
+            flex-wrap: wrap;
+        }
+
+        .color-option {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .color-option.selected {
+            border-color: white;
+            transform: scale(1.1);
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .hero-text h1 {
+                font-size: 2.5rem;
+            }
+            .cart-sidebar {
+                width: 100%;
+            }
+            .user-dashboard {
+                width: 340px;
+                right: 10px;
+            }
+            .nav-links a {
+                display: none;
+            }
+            .lang-text {
+                display: none;
+            }
+            .modal-body {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas-bg"></canvas>
+
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-microchip"></i> FJ COMPUTER
+            </div>
+            <div class="nav-links">
+                <a href="index.html" data-key="navHome">HOME</a>
+                <a href="sanpham.html" data-key="navProducts">PRODUCTS</a>
+                <a href="thanhvien.html" data-key="navTeam">TEAM</a>
+                <a href="lienhe.html" data-key="navContact">CONTACT</a>
+                <div class="cart-icon" onclick="toggleCart()">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count" id="cartCount">0</span>
+                </div>
+                
+                <div class="lang-switcher">
+                    <span class="lang-flag" id="currentFlag">🇻🇳</span>
+                    <span class="lang-text" id="currentLangText">VI</span>
+                    <i class="fas fa-chevron-down" style="font-size: 10px; color: rgba(255,255,255,0.5);"></i>
+                    <div class="lang-dropdown">
+                        <div class="lang-option" onclick="switchLanguage('vi')">
+                            <span>🇻🇳</span>
+                            <span>Tiếng Việt</span>
+                        </div>
+                        <div class="lang-option" onclick="switchLanguage('en')">
+                            <span>🇬🇧</span>
+                            <span>English</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="avatar-btn" id="avatarBtn" onclick="toggleDashboard()">
+                    <span id="avatarText">👤</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- User Dashboard Card -->
+    <div class="user-dashboard" id="userDashboard">
+        <div class="dashboard-cover"></div>
+        <div class="dashboard-body">
+            <div class="dashboard-avatar-wrapper">
+                <div class="dashboard-avatar-large" id="dashboardAvatarLarge" onclick="openAvatarModal()">
+                    <span id="dashboardAvatarText">👤</span>
+                    <div class="edit-avatar-icon">
+                        <i class="fas fa-camera"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="dashboard-name" id="dashboardName">Guest</div>
+            <div class="dashboard-email" id="dashboardEmail">Not signed in</div>
+            <div class="member-tier" id="memberTier">👤 Guest Account</div>
+            
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-icon"><i class="fas fa-shopping-bag"></i></div>
+                    <div class="stat-number" id="orderCount">0</div>
+                    <div class="stat-label" data-key="ordersLabel">ORDERS</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon"><i class="fas fa-star"></i></div>
+                    <div class="stat-number" id="pointsCount">0</div>
+                    <div class="stat-label" data-key="pointsLabel">POINTS</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon"><i class="fas fa-gem"></i></div>
+                    <div class="stat-number" id="tierLevel">Bronze</div>
+                    <div class="stat-label" data-key="tierLabel">TIER</div>
+                </div>
+            </div>
+            
+            <div class="dashboard-menu">
+                <div class="menu-item" onclick="viewOrders()">
+                    <i class="fas fa-history"></i> <span data-key="orderHistory">Order History</span>
+                </div>
+                <div class="menu-item" onclick="viewWishlist()">
+                    <i class="fas fa-heart"></i> <span data-key="wishlist">Wishlist</span>
+                </div>
+                <div class="menu-item" id="loginMenuItem" onclick="window.location.href='login.html'">
+                    <i class="fas fa-sign-in-alt"></i> Đăng nhập
+                </div>
+                <div class="menu-item" id="logoutMenuItem" onclick="logout()" style="display: none;">
+                    <i class="fas fa-sign-out-alt"></i> <span data-key="signOut">Sign Out</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Avatar Modal -->
+    <div class="avatar-modal" id="avatarModal">
+        <div class="avatar-modal-content">
+            <h3 style="margin-bottom: 1.5rem; text-align: center; color: white;" data-key="changeAvatar">Change Profile Picture</h3>
+            <div class="avatar-preview">
+                <div class="avatar-preview-circle" id="avatarPreview">
+                    <span id="previewText">👤</span>
+                </div>
+            </div>
+            <div class="avatar-options">
+                <button class="avatar-option-btn" onclick="showUploadOption()">
+                    <i class="fas fa-upload"></i> <span data-key="uploadPhoto">Upload Photo</span>
+                </button>
+                <button class="avatar-option-btn" onclick="showColorOption()">
+                    <i class="fas fa-palette"></i> <span data-key="generateAvatar">Generate Avatar</span>
+                </button>
+            </div>
+            <div id="uploadSection" style="display: none;">
+                <input type="file" id="avatarFileInput" class="file-input" accept="image/jpeg,image/png,image/gif,image/webp" onchange="uploadAvatar()">
+                <button class="avatar-option-btn" onclick="document.getElementById('avatarFileInput').click()" style="width: 100%;">
+                    <i class="fas fa-folder-open"></i> <span data-key="chooseImage">Choose Image</span>
+                </button>
+                <p style="font-size: 0.7rem; color: rgba(255,255,255,0.5); text-align: center; margin-top: 0.5rem;">Max 5MB. JPG, PNG, GIF, WEBP</p>
+            </div>
+            <div id="colorSection" style="display: none;">
+                <div class="color-options" id="colorOptions">
+                    <div class="color-option" style="background: #ff6b35;" onclick="selectColor('#ff6b35')"></div>
+                    <div class="color-option" style="background: #f7931e;" onclick="selectColor('#f7931e')"></div>
+                    <div class="color-option" style="background: #00d4ff;" onclick="selectColor('#00d4ff')"></div>
+                    <div class="color-option" style="background: #ff00e4;" onclick="selectColor('#ff00e4')"></div>
+                    <div class="color-option" style="background: #00ff88;" onclick="selectColor('#00ff88')"></div>
+                    <div class="color-option" style="background: #a855f7;" onclick="selectColor('#a855f7')"></div>
+                </div>
+                <button class="avatar-option-btn" onclick="generateAvatar()" style="width: 100%; margin-top: 1rem;">
+                    <i class="fas fa-magic"></i> <span data-key="generateBtn">Generate with Selected Color</span>
+                </button>
+            </div>
+            <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                <button class="avatar-option-btn" onclick="resetAvatar()" style="flex: 1; background: rgba(255,255,255,0.1);">
+                    <i class="fas fa-undo"></i> <span data-key="reset">Reset</span>
+                </button>
+                <button class="avatar-option-btn btn-close" onclick="closeAvatarModal()" style="flex: 1;">
+                    <i class="fas fa-times"></i> <span data-key="close">Close</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Chi Tiết Sản Phẩm -->
+    <div id="productModal" class="product-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Chi Tiết Sản Phẩm</h2>
+                <i class="fas fa-times close-modal" onclick="closeModal()"></i>
+            </div>
+            <div class="modal-body" id="modalBody"></div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1><span data-key="heroTitle1">Build Your</span> <span data-key="heroTitle2">Dream PC</span><br><span data-key="heroTitle3">with FJ COMPUTER</span></h1>
+                <p data-key="heroDesc">Premium gaming PCs, workstations, and components. Engineered for performance.</p>
+                <button class="btn-primary" onclick="window.location.href='sanpham.html'"><span data-key="shopNow">Shop Now</span> →</button>
+            </div>
+            <div class="hero-image">
+                <img src="https://images.unsplash.com/photo-1587831990711-23ca6441447b?w=600" alt="Gaming PC">
+            </div>
+        </div>
+    </section>
+
+    <!-- Sản phẩm nổi bật -->
+    <section id="products" class="products-section">
+        <h2 class="section-title" data-key="featuredProducts">🔥 SẢN PHẨM NỔI BẬT</h2>
+        <div class="products-grid" id="productsGrid"></div>
+    </section>
+
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h3><i class="fas fa-shopping-bag"></i> <span data-key="yourCart">Your Cart</span></h3>
+            <i class="fas fa-times" onclick="toggleCart()" style="cursor: pointer;"></i>
+        </div>
+        <div class="cart-items" id="cartItems"></div>
+        <div class="cart-footer">
+            <div class="cart-total" id="cartTotal">Total: 0đ</div>
+            <button class="btn-primary" style="width: 100%; margin-top: 1rem;" onclick="checkout()"><span data-key="checkout">Checkout</span></button>
+        </div>
+    </div>
+
+    <div class="auth-modal" id="authModal">
+        <i class="fas fa-times close-modal-icon" onclick="closeAuthModal()"></i>
+        <div class="auth-card">
+            <div class="auth-header">
+                <h2 data-key="welcomeTitle">Welcome to FJ COMPUTER</h2>
+                <p data-key="welcomeDesc">Sign in to unlock premium features</p>
+            </div>
+            <div class="auth-tabs">
+                <button class="auth-tab active" onclick="switchAuthTab('login')" data-key="signInTab">Sign In</button>
+                <button class="auth-tab" onclick="switchAuthTab('register')" data-key="createAccountTab">Create Account</button>
+            </div>
+            <div id="loginForm" class="auth-form active">
+                <input type="text" id="loginUsername" class="auth-input" placeholder="Username">
+                <input type="password" id="loginPassword" class="auth-input" placeholder="Password">
+                <button class="auth-btn" onclick="handleLogin()"><span data-key="signInBtn">Sign In</span></button>
+            </div>
+            <div id="registerForm" class="auth-form">
+                <input type="text" id="regUsername" class="auth-input" placeholder="Username">
+                <input type="email" id="regEmail" class="auth-input" placeholder="Email">
+                <input type="password" id="regPassword" class="auth-input" placeholder="Password (min 6 chars)">
+                <input type="password" id="regConfirmPassword" class="auth-input" placeholder="Confirm Password">
+                <button class="auth-btn" onclick="handleRegister()"><span data-key="createAccountBtn">Create Account</span></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact & Map Section -->
+    <section class="contact-map-section">
+        <div class="contact-container">
+            <div class="contact-header">
+                <h2 data-key="contactTitle">📍 Liên Hệ Với Chúng Tôi</h2>
+                <p data-key="contactDesc">Chúng tôi luôn sẵn sàng hỗ trợ bạn 24/7</p>
+            </div>
+            <div class="contact-grid">
+                <div class="contact-info-card">
+                    <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+                    <h3 data-key="emailTitle">📧 Email</h3>
+                    <p><strong data-key="emailSupport">Hỗ trợ khách hàng:</strong><br><a href="mailto:support@fjcomputer.com">support@fjcomputer.com</a><br><br>
+                    <strong data-key="emailBusiness">Kinh doanh & Đối tác:</strong><br><a href="mailto:business@fjcomputer.com">business@fjcomputer.com</a><br><br>
+                    <strong data-key="emailHR">Tuyển dụng:</strong><br><a href="mailto:hr@fjcomputer.com">hr@fjcomputer.com</a></p>
+                </div>
+                <div class="contact-info-card">
+                    <div class="contact-icon"><i class="fas fa-phone-alt"></i></div>
+                    <h3 data-key="phoneTitle">📞 Hotline</h3>
+                    <p><strong data-key="phoneSales">Tổng đài bán hàng:</strong><br><a href="tel:+842812345678">1900 1234</a> - (028) 1234 5678<br><br>
+                    <strong data-key="phoneTech">Hỗ trợ kỹ thuật:</strong><br><a href="tel:+842887654321">1900 5678</a> - (028) 8765 4321<br><br>
+                    <strong data-key="phoneComplaint">Khiếu nại & Góp ý:</strong><br><a href="tel:+842899988877">1900 9999</a> - (028) 9998 8877</p>
+                    <div class="working-hours">
+                        <h4 style="color: white; font-size: 0.9rem; margin-bottom: 0.8rem;" data-key="workingHours">🕐 Giờ làm việc</h4>
+                        <p><span class="day" data-key="monFri">Thứ 2 - Thứ 6:</span><span class="time" data-key="timeNormal">8:00 - 21:00</span></p>
+                        <p><span class="day" data-key="satSun">Thứ 7 - Chủ Nhật:</span><span class="time" data-key="timeWeekend">9:00 - 18:00</span></p>
+                        <p><span class="day" data-key="holiday">Ngày lễ:</span><span class="time" data-key="timeHoliday">10:00 - 17:00</span></p>
+                    </div>
+                </div>
+                <div class="map-card">
+                    <div class="contact-icon" style="width: 60px; height: 60px; font-size: 24px;"><i class="fas fa-map-marker-alt"></i></div>
+                    <h3 data-key="addressTitle">🏢 Hệ Thống Cửa Hàng</h3>
+                    <div class="map-container">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.4384034609333!2d106.7002693!3d10.7769094!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752f3f2a2b5d2d%3A0x5e8a7f6e8f9a3e2d!2zMjMxIE5ndXnhu4VuIFRo4bubaSDEkMOsbmggLVBoxrDhu51uZyBOZ3V54buFbiBUaOG7pWkgxJDDrG5oLCBQaMaw4budbmcgTeG7iW4gVGjDoG5oLCBUaMOgbmggcGjhu5EgSOG7kyBDaMOtIE1pbmgsIFZp4buHdCBOYW0!5e0!3m2!1svi!2s!4v1700000000000!5m2!1svi!2s" allowfullscreen="" loading="lazy"></iframe>
+                    </div>
+                    <div class="map-address"><i class="fas fa-map-pin"></i><strong data-key="hqAddress">Trụ sở chính:</strong><br><span data-key="hqAddressDetail">123 Nguyễn Huệ, Phường Bến Nghé, Quận 1, TP. Hồ Chí Minh</span></div>
+                    <div class="map-address"><i class="fas fa-store"></i><strong data-key="branchAddress">Chi nhánh Hà Nội:</strong><br><span data-key="hnAddressDetail">456 Thái Hà, Đống Đa, Hà Nội</span></div>
+                    <div class="map-address"><i class="fas fa-building"></i><strong data-key="branch2Address">Chi nhánh Đà Nẵng:</strong><br><span data-key="dnAddressDetail">789 Nguyễn Văn Linh, Thanh Khê, Đà Nẵng</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2025 FJ COMPUTER - <span data-key="footerText">Premium Gaming & Workstation PCs. All rights reserved.</span></p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        // Language Data
+        const translations = {
+            vi: {
+                navHome: "TRANG CHỦ",
+                navProducts: "SẢN PHẨM",
+                navContact: "LIÊN HỆ",
+                navTeam: "THÀNH VIÊN",
+                ordersLabel: "ĐƠN HÀNG",
+                pointsLabel: "ĐIỂM",
+                tierLabel: "HẠNG",
+                orderHistory: "Lịch sử đơn hàng",
+                wishlist: "Danh sách yêu thích",
+                signIn: "Đăng nhập",
+                signOut: "Đăng xuất",
+                changeAvatar: "Đổi ảnh đại diện",
+                uploadPhoto: "Tải ảnh lên",
+                generateAvatar: "Tạo avatar",
+                chooseImage: "Chọn ảnh",
+                generateBtn: "Tạo với màu đã chọn",
+                reset: "Đặt lại",
+                close: "Đóng",
+                heroTitle1: "Xây dựng",
+                heroTitle2: "PC Mơ Ước",
+                heroTitle3: "cùng FJ COMPUTER",
+                heroDesc: "PC gaming cao cấp, máy trạm và linh kiện. Được thiết kế cho hiệu năng vượt trội.",
+                shopNow: "Mua ngay",
+                featuredProducts: "🔥 SẢN PHẨM NỔI BẬT",
+                yourCart: "Giỏ hàng của bạn",
+                checkout: "Thanh toán",
+                welcomeTitle: "Chào mừng đến với FJ COMPUTER",
+                welcomeDesc: "Đăng nhập để mở khóa tính năng cao cấp",
+                signInTab: "Đăng nhập",
+                createAccountTab: "Tạo tài khoản",
+                signInBtn: "Đăng nhập",
+                createAccountBtn: "Tạo tài khoản",
+                footerText: "PC gaming & máy trạm cao cấp. Bảo lưu mọi quyền.",
+                guest: "Khách",
+                notSignedIn: "Chưa đăng nhập",
+                guestAccount: "👤 Tài khoản khách",
+                premiumMember: "⭐ Thành viên cao cấp",
+                cartEmpty: "Giỏ hàng trống",
+                addToCart: "Thêm vào giỏ",
+                total: "Tổng cộng",
+                contactTitle: "📍 Liên Hệ Với Chúng Tôi",
+                contactDesc: "Chúng tôi luôn sẵn sàng hỗ trợ bạn 24/7",
+                emailTitle: "📧 Email",
+                emailSupport: "Hỗ trợ khách hàng",
+                emailBusiness: "Kinh doanh & Đối tác",
+                emailHR: "Tuyển dụng",
+                phoneTitle: "📞 Hotline",
+                phoneSales: "Tổng đài bán hàng",
+                phoneTech: "Hỗ trợ kỹ thuật",
+                phoneComplaint: "Khiếu nại & Góp ý",
+                workingHours: "🕐 Giờ làm việc",
+                monFri: "Thứ 2 - Thứ 6",
+                satSun: "Thứ 7 - Chủ Nhật",
+                holiday: "Ngày lễ",
+                timeNormal: "8:00 - 21:00",
+                timeWeekend: "9:00 - 18:00",
+                timeHoliday: "10:00 - 17:00",
+                addressTitle: "🏢 Hệ Thống Cửa Hàng",
+                hqAddress: "Trụ sở chính",
+                branchAddress: "Chi nhánh Hà Nội",
+                branch2Address: "Chi nhánh Đà Nẵng",
+                hqAddressDetail: "123 Nguyễn Huệ, Phường Bến Nghé, Quận 1, TP. Hồ Chí Minh",
+                hnAddressDetail: "456 Thái Hà, Đống Đa, Hà Nội",
+                dnAddressDetail: "789 Nguyễn Văn Linh, Thanh Khê, Đà Nẵng"
+            },
+            en: {
+                navHome: "HOME",
+                navProducts: "PRODUCTS",
+                navContact: "CONTACT",
+                navTeam: "TEAM",
+                ordersLabel: "ORDERS",
+                pointsLabel: "POINTS",
+                tierLabel: "TIER",
+                orderHistory: "Order History",
+                wishlist: "Wishlist",
+                signIn: "Sign In",
+                signOut: "Sign Out",
+                changeAvatar: "Change Profile Picture",
+                uploadPhoto: "Upload Photo",
+                generateAvatar: "Generate Avatar",
+                chooseImage: "Choose Image",
+                generateBtn: "Generate with Selected Color",
+                reset: "Reset",
+                close: "Close",
+                heroTitle1: "Build Your",
+                heroTitle2: "Dream PC",
+                heroTitle3: "with FJ COMPUTER",
+                heroDesc: "Premium gaming PCs, workstations, and components. Engineered for performance.",
+                shopNow: "Shop Now",
+                featuredProducts: "🔥 FEATURED PRODUCTS",
+                yourCart: "Your Cart",
+                checkout: "Checkout",
+                welcomeTitle: "Welcome to FJ COMPUTER",
+                welcomeDesc: "Sign in to unlock premium features",
+                signInTab: "Sign In",
+                createAccountTab: "Create Account",
+                signInBtn: "Sign In",
+                createAccountBtn: "Create Account",
+                footerText: "Premium Gaming & Workstation PCs. All rights reserved.",
+                guest: "Guest",
+                notSignedIn: "Not signed in",
+                guestAccount: "👤 Guest Account",
+                premiumMember: "⭐ Premium Member",
+                cartEmpty: "Cart is empty",
+                addToCart: "Add to Cart",
+                total: "Total",
+                contactTitle: "📍 Contact Us",
+                contactDesc: "We are always ready to support you 24/7",
+                emailTitle: "📧 Email",
+                emailSupport: "Customer Support",
+                emailBusiness: "Business & Partnerships",
+                emailHR: "Careers / HR",
+                phoneTitle: "📞 Hotline",
+                phoneSales: "Sales Hotline",
+                phoneTech: "Technical Support",
+                phoneComplaint: "Complaints & Feedback",
+                workingHours: "🕐 Working Hours",
+                monFri: "Monday - Friday",
+                satSun: "Saturday - Sunday",
+                holiday: "Public Holidays",
+                timeNormal: "8:00 AM - 9:00 PM",
+                timeWeekend: "9:00 AM - 6:00 PM",
+                timeHoliday: "10:00 AM - 5:00 PM",
+                addressTitle: "🏢 Store Locations",
+                hqAddress: "Headquarters",
+                branchAddress: "Hanoi Branch",
+                branch2Address: "Da Nang Branch",
+                hqAddressDetail: "123 Nguyen Hue Street, Ben Nghe Ward, District 1, Ho Chi Minh City",
+                hnAddressDetail: "456 Thai Ha Street, Dong Da District, Hanoi",
+                dnAddressDetail: "789 Nguyen Van Linh Street, Thanh Khe District, Da Nang"
+            }
+        };
+
+        // Sản phẩm nổi bật
+        const featuredProducts = [
+            { id: 1, name: "FJ Titan X9", category: "pc", specs: "Intel i9-14900K | RTX 4090 | 64GB DDR5 | 2TB NVMe", price: 65990000, oldPrice: 75990000, image: "https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=400", badge: "Flagship",
+              cpu: "Intel Core i9-14900K (24 nhân, 32 luồng, up to 6.0GHz) - Tản nhiệt nước 360mm",
+              gpu: "NVIDIA GeForce RTX 4090 24GB GDDR6X",
+              ram: "64GB DDR5 6000MHz RGB (2x32GB)",
+              storage: "2TB Samsung 990 Pro NVMe SSD + 2TB HDD",
+              description: "PC Gaming siêu cấp của FJ Computer, được build thủ công bởi đội ngũ kỹ thuật giàu kinh nghiệm. Sử dụng linh kiện cao cấp nhất, case RGB, nguồn 1000W Gold, đáp ứng mọi nhu cầu gaming, render, AI." },
+            { id: 2, name: "ASUS ROG Strix G18", category: "laptop", specs: "Intel i9-13980HX | RTX 4090 | 32GB DDR5 | 2TB SSD", price: 69990000, oldPrice: 79990000, image: "data:image/jpeg;base64,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", badge: "HOT",
+              cpu: "Intel Core i9-13980HX (24 nhân, 32 luồng, up to 5.6GHz)",
+              gpu: "NVIDIA GeForce RTX 4090 16GB GDDR6",
+              ram: "32GB DDR5 5600MHz (2x16GB)",
+              storage: "2TB NVMe PCIe 4.0 SSD",
+              display: "18 inch QHD+ (2560x1600), 240Hz, 3ms, IPS, 500 nits",
+              description: "Laptop gaming mạnh mẽ nhất của ASUS với thiết kế đột phá, tản nhiệt 3 quạt và sử dụng công nghệ Liquid Metal." },
+            { id: 3, name: "FJ Phantom G5", category: "pc", specs: "Intel i7-14700K | RTX 4080 | 32GB DDR5 | 1TB NVMe", price: 45990000, oldPrice: 52990000, image: "https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?w=400", badge: "Best Seller",
+              cpu: "Intel Core i7-14700K (20 nhân, 28 luồng, up to 5.6GHz) - Tản nhiệt khí cao cấp",
+              gpu: "NVIDIA GeForce RTX 4080 16GB GDDR6X",
+              ram: "32GB DDR5 6000MHz (2x16GB)",
+              storage: "1TB Kingston KC3000 NVMe SSD",
+              description: "PC Gaming tầm trung cao cấp, cân bằng giữa hiệu năng và giá thành. Phù hợp cho game thủ chuyên nghiệp và streamer." },
+            { id: 4, name: "MSI Titan GT77 HX", category: "laptop", specs: "Intel i9-13980HX | RTX 4090 | 64GB DDR5 | 4TB SSD", price: 89990000, oldPrice: 99990000, image: "data:image/jpeg;base64,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", badge: "Premium",
+              cpu: "Intel Core i9-13980HX (24 nhân, 32 luồng, up to 5.6GHz)",
+              gpu: "NVIDIA GeForce RTX 4090 16GB GDDR6",
+              ram: "64GB DDR5 5600MHz (4x16GB)",
+              storage: "4TB NVMe PCIe 4.0 SSD (2x2TB RAID 0)",
+              display: "17.3 inch 4K UHD (3840x2160), 144Hz, Mini-LED, 1000 nits",
+              description: "Chiếc laptop mạnh nhất thế giới hiện tại, được trang bị cơ chế tản nhiệt độc quyền với 4 quạt và 8 ống đồng." }
+        ];
+
+        let cart = [];
+        let currentUser = null;
+        let selectedColor = '#ff6b35';
+        let currentLang = localStorage.getItem('language') || 'vi';
+
+        // Hiển thị sản phẩm nổi bật
+        function displayProducts() {
+            const grid = document.getElementById('productsGrid');
+            if (!grid) return;
+            grid.innerHTML = featuredProducts.map(product => `
+                <div class="product-card" onclick="showProductDetail(${product.id})">
+                    <div style="position: relative;">
+                        ${product.badge ? `<div class="product-badge">${product.badge}</div>` : ''}
+                        <img src="${product.image}" class="product-image">
+                    </div>
+                    <div class="product-info">
+                        <div class="product-name">${product.name}</div>
+                        <div class="product-specs">${product.specs}</div>
+                        <div class="product-price">
+                            ${product.price.toLocaleString('vi-VN')}đ
+                            ${product.oldPrice ? `<span class="old-price" style="font-size:0.9rem; text-decoration:line-through; margin-left:0.5rem; color:rgba(255,255,255,0.3);">${product.oldPrice.toLocaleString('vi-VN')}đ</span>` : ''}
+                        </div>
+                        <button class="add-to-cart" onclick="event.stopPropagation(); addToCart(${product.id})">${translations[currentLang].addToCart}</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Hiển thị chi tiết sản phẩm
+        function showProductDetail(id) {
+            const product = featuredProducts.find(p => p.id === id);
+            if (!product) return;
+
+            document.getElementById('modalTitle').textContent = product.name;
+            
+            let componentsHtml = '';
+            if (product.category === 'laptop' || product.category === 'pc') {
+                componentsHtml = `
+                    <div class="component-section">
+                        <div class="component-title"><i class="fas fa-microchip"></i> LINH KIỆN BÊN TRONG</div>
+                        <div class="component-grid">
+                            <div class="component-item"><i class="fas fa-microchip"></i><div class="component-name">CPU</div><div class="component-desc">${product.cpu || 'Intel Core'}</div></div>
+                            <div class="component-item"><i class="fas fa-tv"></i><div class="component-name">GPU</div><div class="component-desc">${product.gpu || 'NVIDIA RTX'}</div></div>
+                            <div class="component-item"><i class="fas fa-memory"></i><div class="component-name">RAM</div><div class="component-desc">${product.ram || '32GB DDR5'}</div></div>
+                            <div class="component-item"><i class="fas fa-hdd"></i><div class="component-name">SSD</div><div class="component-desc">${product.storage || '1TB NVMe'}</div></div>
+                            ${product.display ? `<div class="component-item"><i class="fas fa-desktop"></i><div class="component-name">MÀN HÌNH</div><div class="component-desc">${product.display}</div></div>` : ''}
+                        </div>
+                    </div>
+                `;
+            }
+
+            document.getElementById('modalBody').innerHTML = `
+                <div class="modal-image"><img src="${product.image}" alt="${product.name}"></div>
+                <div class="modal-info">
+                    <h3>📋 CẤU HÌNH CHI TIẾT</h3>
+                    <ul class="spec-list">
+                        <li><span class="spec-icon"><i class="fas fa-tag"></i></span><span>${product.category === 'laptop' ? '💻 Laptop Gaming' : '🖥️ PC Gaming'}</span></li>
+                        <li><span class="spec-icon"><i class="fas fa-microchip"></i></span><span>${product.specs}</span></li>
+                        ${product.oldPrice ? `<li><span class="spec-icon"><i class="fas fa-percent"></i></span><span>Tiết kiệm: ${(product.oldPrice - product.price).toLocaleString('vi-VN')}đ (${Math.round((product.oldPrice - product.price)/product.oldPrice*100)}%)</span></li>` : ''}
+                    </ul>
+                    ${componentsHtml}
+                    <div class="component-section">
+                        <div class="component-title"><i class="fas fa-info-circle"></i> GIỚI THIỆU</div>
+                        <p style="color: rgba(255,255,255,0.7); line-height: 1.6;">${product.description}</p>
+                    </div>
+                    <div class="modal-price">${product.price.toLocaleString('vi-VN')}đ</div>
+                    <div class="modal-buttons">
+                        <button class="modal-buy-btn" onclick="addToCartAndClose(${product.id})"><i class="fas fa-cart-plus"></i> Thêm vào giỏ</button>
+                        <button class="modal-buy-btn" style="background: linear-gradient(135deg, #f7931e, #ff6b35);" onclick="buyNow(${product.id})"><i class="fas fa-bolt"></i> Mua ngay</button>
+                    </div>
+                </div>
+            `;
+            document.getElementById('productModal').classList.add('active');
+        }
+
+        function closeModal() { document.getElementById('productModal').classList.remove('active'); }
+        function addToCartAndClose(id) { addToCart(id); closeModal(); }
+        function buyNow(id) { addToCart(id); closeModal(); checkout(); }
+
+        function addToCart(productId) {
+            if (!currentUser) { showToast(translations[currentLang].signIn, 'error'); openAuthModal(); return; }
+            const product = featuredProducts.find(p => p.id === productId);
+            const existing = cart.find(item => item.id === productId);
+            if (existing) existing.quantity++; else cart.push({ ...product, quantity: 1 });
+            updateCartUI(); saveCart(); showToast(`Đã thêm ${product.name} vào giỏ!`, 'success');
+        }
+
+        function updateCartUI() {
+            const cartItemsDiv = document.getElementById('cartItems');
+            const cartCount = document.getElementById('cartCount');
+            const totalItems = cart.reduce((s, i) => s + i.quantity, 0);
+            if (cartCount) cartCount.textContent = totalItems;
+            if (!cartItemsDiv) return;
+            if (cart.length === 0) {
+                cartItemsDiv.innerHTML = `<p style="text-align: center; padding: 2rem; color: rgba(255,255,255,0.5);">${translations[currentLang].cartEmpty}</p>`;
+                document.getElementById('cartTotal').innerHTML = `${translations[currentLang].total}: 0đ`;
+                return;
+            }
+            cartItemsDiv.innerHTML = cart.map(item => `
+                <div class="cart-item">
+                    <img src="${item.image}" style="width: 70px; height: 70px; object-fit: cover; border-radius: 10px;">
+                    <div style="flex: 1;">
+                        <div style="font-weight: 600; color: white;">${item.name}</div>
+                        <div style="color: #ff6b35;">${(item.price * item.quantity).toLocaleString('vi-VN')}đ</div>
+                        <div style="display: flex; gap: 8px; margin-top: 8px;">
+                            <button onclick="updateQuantity(${item.id}, -1)" style="background: rgba(255,255,255,0.1); border: none; padding: 4px 10px; border-radius: 5px; cursor: pointer; color: white;">-</button>
+                            <span style="color: white;">${item.quantity}</span>
+                            <button onclick="updateQuantity(${item.id}, 1)" style="background: rgba(255,255,255,0.1); border: none; padding: 4px 10px; border-radius: 5px; cursor: pointer; color: white;">+</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            const total = cart.reduce((s, i) => s + (i.price * i.quantity), 0);
+            document.getElementById('cartTotal').innerHTML = `${translations[currentLang].total}: ${total.toLocaleString('vi-VN')}đ`;
+        }
+
+        function updateQuantity(productId, change) {
+            const item = cart.find(i => i.id === productId);
+            if (item) { item.quantity += change; if (item.quantity <= 0) cart = cart.filter(i => i.id !== productId); updateCartUI(); saveCart(); }
+        }
+
+        async function saveCart() { if (currentUser) { currentUser.cart = cart; localStorage.setItem('currentUser', JSON.stringify(currentUser)); } }
+
+        // Avatar Functions (giữ nguyên từ code cũ)
+        function updateAvatarDisplay() {
+            const avatarBtnSpan = document.getElementById('avatarText');
+            const dashboardAvatarSpan = document.getElementById('dashboardAvatarText');
+            if (currentUser) {
+                const letter = currentUser.username.charAt(0).toUpperCase();
+                avatarBtnSpan.innerHTML = letter;
+                dashboardAvatarSpan.innerHTML = letter;
+            } else {
+                avatarBtnSpan.innerHTML = '👤';
+                dashboardAvatarSpan.innerHTML = '👤';
+            }
+        }
+
+        function openAvatarModal() { if (!currentUser) { showToast(translations[currentLang].signIn, 'error'); openAuthModal(); return; } document.getElementById('avatarModal').classList.add('active'); }
+        function closeAvatarModal() { document.getElementById('avatarModal').classList.remove('active'); document.getElementById('uploadSection').style.display = 'none'; document.getElementById('colorSection').style.display = 'none'; }
+        function showUploadOption() { document.getElementById('uploadSection').style.display = 'block'; document.getElementById('colorSection').style.display = 'none'; }
+        function showColorOption() { document.getElementById('uploadSection').style.display = 'none'; document.getElementById('colorSection').style.display = 'block'; }
+        function selectColor(color) { selectedColor = color; document.querySelectorAll('.color-option').forEach(opt => { opt.classList.remove('selected'); if (opt.style.background === color) opt.classList.add('selected'); }); }
+        async function uploadAvatar() { showToast('Upload feature coming soon!', 'info'); }
+        async function generateAvatar() { showToast('Generate avatar feature coming soon!', 'info'); }
+        async function resetAvatar() { showToast('Reset avatar feature coming soon!', 'info'); }
+
+        async function handleLogin() {
+            const username = document.getElementById('loginUsername').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            if (!username || !password) { showToast('Please fill all fields!', 'error'); return; }
+            const users = JSON.parse(localStorage.getItem('fj_users') || '[]');
+            const user = users.find(u => u.username === username && u.password === password);
+            if (user) {
+                currentUser = user;
+                cart = currentUser.cart || [];
+                updateCartUI(); updateDashboardUI(); updateAvatarDisplay(); closeAuthModal();
+                showToast(`Welcome back, ${username}!`, 'success');
+                document.getElementById('loginUsername').value = ''; document.getElementById('loginPassword').value = '';
+            } else { showToast('Invalid username or password!', 'error'); }
+        }
+
+        async function handleRegister() {
+            const username = document.getElementById('regUsername').value.trim();
+            const email = document.getElementById('regEmail').value.trim();
+            const password = document.getElementById('regPassword').value;
+            const confirm = document.getElementById('regConfirmPassword').value;
+            if (password !== confirm) { showToast('Passwords do not match!', 'error'); return; }
+            if (password.length < 6) { showToast('Password must be at least 6 characters!', 'error'); return; }
+            const users = JSON.parse(localStorage.getItem('fj_users') || '[]');
+            if (users.find(u => u.username === username)) { showToast('Username already exists!', 'error'); return; }
+            users.push({ username, email, password, createdAt: new Date().toISOString(), loyaltyPoints: 0, orders: [], cart: [] });
+            localStorage.setItem('fj_users', JSON.stringify(users));
+            showToast('Registration successful! Please sign in.', 'success');
+            switchAuthTab('login');
+            document.getElementById('regUsername').value = ''; document.getElementById('regEmail').value = ''; document.getElementById('regPassword').value = ''; document.getElementById('regConfirmPassword').value = '';
+        }
+
+        function logout() { currentUser = null; cart = []; updateCartUI(); updateDashboardUI(); updateAvatarDisplay(); localStorage.removeItem('currentUser'); showToast('Logged out successfully!', 'success'); document.getElementById('userDashboard').classList.remove('active'); }
+
+        function updateDashboardUI() {
+            const dashboardName = document.getElementById('dashboardName');
+            const dashboardEmail = document.getElementById('dashboardEmail');
+            const memberTier = document.getElementById('memberTier');
+            const orderCount = document.getElementById('orderCount');
+            const pointsCount = document.getElementById('pointsCount');
+            const tierLevel = document.getElementById('tierLevel');
+            const loginMenuItem = document.getElementById('loginMenuItem');
+            const logoutMenuItem = document.getElementById('logoutMenuItem');
+            if (currentUser) {
+                dashboardName.textContent = currentUser.username;
+                dashboardEmail.textContent = currentUser.email;
+                memberTier.innerHTML = translations[currentLang].premiumMember;
+                orderCount.textContent = currentUser.orders?.length || 0;
+                const points = currentUser.loyaltyPoints || 0;
+                pointsCount.textContent = points;
+                let tier = 'Bronze';
+                if (points >= 1000) tier = 'Diamond';
+                else if (points >= 500) tier = 'Platinum';
+                else if (points >= 100) tier = 'Gold';
+                else if (points >= 50) tier = 'Silver';
+                tierLevel.textContent = tier;
+                loginMenuItem.style.display = 'none';
+                logoutMenuItem.style.display = 'flex';
+            } else {
+                dashboardName.textContent = translations[currentLang].guest;
+                dashboardEmail.textContent = translations[currentLang].notSignedIn;
+                memberTier.innerHTML = translations[currentLang].guestAccount;
+                orderCount.textContent = '0';
+                pointsCount.textContent = '0';
+                tierLevel.textContent = 'Bronze';
+                loginMenuItem.style.display = 'flex';
+                logoutMenuItem.style.display = 'none';
+            }
+        }
+
+        function toggleDashboard() { document.getElementById('userDashboard').classList.toggle('active'); }
+        function toggleCart() { document.getElementById('cartSidebar').classList.toggle('open'); }
+        function openAuthModal() { document.getElementById('authModal').classList.add('active'); toggleDashboard(); }
+        function closeAuthModal() { document.getElementById('authModal').classList.remove('active'); }
+        function switchAuthTab(tab) {
+            const tabs = document.querySelectorAll('.auth-tab');
+            const loginForm = document.getElementById('loginForm');
+            const registerForm = document.getElementById('registerForm');
+            tabs.forEach(t => t.classList.remove('active'));
+            if (tab === 'login') { tabs[0].classList.add('active'); loginForm.classList.add('active'); registerForm.classList.remove('active'); }
+            else { tabs[1].classList.add('active'); loginForm.classList.remove('active'); registerForm.classList.add('active'); }
+        }
+
+        function checkout() {
+            if (!currentUser) { showToast(translations[currentLang].signIn, 'error'); openAuthModal(); return; }
+            if (cart.length === 0) { showToast(translations[currentLang].cartEmpty, 'error'); return; }
+            localStorage.setItem('checkoutCart', JSON.stringify(cart));
+            window.location.href = 'thanhtoan.html';
+        }
+
+        function viewOrders() { showToast('Order history feature coming soon!', 'success'); }
+        function viewWishlist() { showToast('Wishlist feature coming soon!', 'success'); }
+        function showToast(message, type) { const toast = document.createElement('div'); toast.className = 'toast'; toast.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}" style="margin-right: 10px;"></i>${message}`; document.body.appendChild(toast); setTimeout(() => toast.remove(), 3000); }
+
+        function switchLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('language', lang);
+            document.querySelectorAll('[data-key]').forEach(el => {
+                const key = el.getAttribute('data-key');
+                if (translations[lang][key]) {
+                    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') el.placeholder = translations[lang][key];
+                    else el.textContent = translations[lang][key];
+                }
+            });
+            const currentFlag = document.getElementById('currentFlag');
+            const currentLangText = document.getElementById('currentLangText');
+            if (lang === 'vi') { currentFlag.textContent = '🇻🇳'; currentLangText.textContent = 'VI'; }
+            else { currentFlag.textContent = '🇬🇧'; currentLangText.textContent = 'EN'; }
+            updateDashboardUI(); updateCartEmptyText(); displayProducts();
+            showToast(translations[lang].welcomeDesc, 'success');
+        }
+
+        function updateCartEmptyText() { const cartItemsDiv = document.getElementById('cartItems'); if (cartItemsDiv && cart.length === 0) cartItemsDiv.innerHTML = `<p style="text-align: center; padding: 2rem; color: rgba(255,255,255,0.5);">${translations[currentLang].cartEmpty}</p>`; }
+
+        // Three.js Background
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('canvas-bg'), alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        const particlesGeometry = new THREE.BufferGeometry();
+        const particlesCount = 2000;
+        const posArray = new Float32Array(particlesCount * 3);
+        for(let i = 0; i < particlesCount * 3; i += 3) { posArray[i] = (Math.random() - 0.5) * 200; posArray[i+1] = (Math.random() - 0.5) * 100; posArray[i+2] = (Math.random() - 0.5) * 100; }
+        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+        const particlesMaterial = new THREE.PointsMaterial({ size: 0.15, color: 0xff6b35, transparent: true, opacity: 0.5, blending: THREE.AdditiveBlending });
+        const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+        scene.add(particlesMesh);
+        camera.position.z = 30;
+        let mouseX = 0, mouseY = 0;
+        document.addEventListener('mousemove', (e) => { mouseX = (e.clientX / window.innerWidth - 0.5) * 2; mouseY = (e.clientY / window.innerHeight - 0.5) * 2; });
+        function animate() { requestAnimationFrame(animate); particlesMesh.rotation.y += 0.002; particlesMesh.rotation.x += 0.001; camera.position.x += (mouseX - camera.position.x) * 0.05; camera.position.y += (-mouseY - camera.position.y) * 0.05; camera.lookAt(scene.position); renderer.render(scene, camera); }
+        animate();
+        window.addEventListener('resize', () => { camera.aspect = window.innerWidth / window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight); });
+        window.addEventListener('scroll', () => { const navbar = document.getElementById('navbar'); if (window.scrollY > 50) navbar.classList.add('scrolled'); else navbar.classList.remove('scrolled'); });
+
+        window.onload = () => {
+            displayProducts();
+            const savedUser = localStorage.getItem('currentUser');
+            if (savedUser) { try { currentUser = JSON.parse(savedUser); cart = currentUser.cart || []; updateCartUI(); updateDashboardUI(); updateAvatarDisplay(); } catch(e) { console.error(e); } }
+            updateDashboardUI(); updateAvatarDisplay(); switchLanguage(currentLang);
+            document.addEventListener('click', (e) => { if (!e.target.closest('.avatar-btn') && !e.target.closest('.user-dashboard')) document.getElementById('userDashboard').classList.remove('active'); });
+        };
+    </script>
+</body>
+</html>
