@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sản Phẩm | FJ COMPUTER - Laptop Gaming & PC Gaming</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: #0a0a0f;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        .navbar {
+            position: sticky;
+            top: 0;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            padding: 0.8rem 2rem;
+            border-bottom: 1px solid rgba(255,107,35,0.3);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.3s;
+            font-size: 14px;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: #ff6b35;
+        }
+
+        .cart-icon {
+            position: relative;
+            cursor: pointer;
+            font-size: 22px;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -10px;
+            right: -12px;
+            background: #ff6b35;
+            color: white;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 20px;
+        }
+
+        .lang-switcher {
+            position: relative;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.05);
+            padding: 8px 14px;
+            border-radius: 40px;
+            transition: 0.3s;
+            border: 1px solid rgba(255,107,35,0.3);
+        }
+
+        .lang-switcher:hover {
+            background: rgba(255,107,35,0.2);
+            border-color: #ff6b35;
+        }
+
+        .lang-flag {
+            font-size: 18px;
+        }
+
+        .lang-text {
+            font-size: 13px;
+            font-weight: 600;
+            color: white;
+        }
+
+        .lang-dropdown {
+            position: absolute;
+            top: 50px;
+            right: 0;
+            background: rgba(10, 15, 26, 0.98);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            border: 1px solid rgba(255,107,35,0.3);
+            overflow: hidden;
+            min-width: 140px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s;
+            z-index: 100;
+        }
+
+        .lang-switcher:hover .lang-dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .lang-option {
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+            color: rgba(255,255,255,0.8);
+        }
+
+        .lang-option:hover {
+            background: rgba(255,107,35,0.2);
+            color: #ff6b35;
+        }
+
+        .avatar-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+
+        .page-header {
+            background: linear-gradient(135deg, #0f0f1a, #050508);
+            padding: 3rem 2rem;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,107,35,0.2);
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header h1 span {
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .page-header p {
+            color: rgba(255,255,255,0.5);
+        }
+
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 2rem;
+        }
+
+        .filters-sidebar {
+            background: rgba(255,255,255,0.03);
+            border-radius: 24px;
+            padding: 1.5rem;
+            height: fit-content;
+            position: sticky;
+            top: 90px;
+            border: 1px solid rgba(255,107,35,0.15);
+        }
+
+        .filter-section {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .filter-section h3 {
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            color: #ff6b35;
+        }
+
+        .filter-category {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .filter-category label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            color: rgba(255,255,255,0.7);
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+
+        .filter-category label:hover {
+            color: #ff6b35;
+        }
+
+        .filter-category input {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #ff6b35;
+        }
+
+        .price-inputs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .price-inputs input {
+            width: 100%;
+            padding: 0.5rem;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            color: white;
+        }
+
+        .price-inputs input::placeholder {
+            color: rgba(255,255,255,0.4);
+        }
+
+        .filter-btn {
+            width: 100%;
+            padding: 0.7rem;
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            border: none;
+            border-radius: 30px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+
+        .products-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .products-count {
+            color: rgba(255,255,255,0.5);
+        }
+
+        .sort-select {
+            padding: 0.5rem 1rem;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 30px;
+            color: white;
+            cursor: pointer;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .product-card {
+            background: rgba(255,255,255,0.03);
+            border-radius: 24px;
+            overflow: hidden;
+            transition: all 0.4s;
+            border: 1px solid rgba(255,107,53,0.15);
+            cursor: pointer;
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            border-color: #ff6b35;
+            box-shadow: 0 20px 40px rgba(255,107,53,0.15);
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: #ff6b35;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            z-index: 1;
+        }
+
+        .product-image {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            transition: 0.3s;
+        }
+
+        .product-card:hover .product-image {
+            transform: scale(1.02);
+        }
+
+        .product-info {
+            padding: 1.2rem;
+        }
+
+        .product-category {
+            font-size: 0.7rem;
+            color: #ff6b35;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-name {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-specs {
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.5);
+            margin-bottom: 1rem;
+            line-height: 1.4;
+        }
+
+        .product-price {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #ff6b35;
+            margin-bottom: 1rem;
+        }
+
+        .old-price {
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.3);
+            text-decoration: line-through;
+            margin-left: 0.5rem;
+        }
+
+        .add-to-cart {
+            width: 100%;
+            padding: 0.7rem;
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            border: none;
+            border-radius: 30px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .add-to-cart:hover {
+            transform: scale(1.02);
+        }
+
+        .cart-sidebar {
+            position: fixed;
+            top: 0;
+            right: -500px;
+            width: 500px;
+            height: 100vh;
+            background: #0a0f1a;
+            z-index: 1002;
+            transition: 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cart-sidebar.open {
+            right: 0;
+        }
+
+        .cart-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .cart-items {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+
+        .cart-footer {
+            padding: 1.5rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .cart-total {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        /* Modal Chi Tiết Sản Phẩm */
+        .product-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            backdrop-filter: blur(20px);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .product-modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #0a0f1a, #05080f);
+            border-radius: 32px;
+            max-width: 1000px;
+            width: 90%;
+            max-height: 85vh;
+            overflow-y: auto;
+            border: 1px solid rgba(255,107,53,0.3);
+            animation: modalIn 0.3s;
+        }
+
+        @keyframes modalIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .modal-header {
+            position: relative;
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .close-modal {
+            font-size: 28px;
+            cursor: pointer;
+            color: rgba(255,255,255,0.5);
+            transition: 0.3s;
+        }
+
+        .close-modal:hover {
+            color: #ff6b35;
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .modal-image {
+            width: 100%;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .modal-image img {
+            width: 100%;
+            height: auto;
+            border-radius: 20px;
+        }
+
+        .modal-info h3 {
+            color: #ff6b35;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .spec-list {
+            list-style: none;
+            margin-bottom: 1.5rem;
+        }
+
+        .spec-list li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            display: flex;
+            gap: 1rem;
+        }
+
+        .spec-icon {
+            width: 30px;
+            color: #ff6b35;
+        }
+
+        .component-section {
+            margin-top: 1.5rem;
+            background: rgba(255,255,255,0.03);
+            border-radius: 20px;
+            padding: 1rem;
+        }
+
+        .component-title {
+            font-weight: 700;
+            color: #ff6b35;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .component-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.8rem;
+        }
+
+        .component-item {
+            background: rgba(255,255,255,0.05);
+            padding: 0.8rem;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .component-item i {
+            font-size: 24px;
+            color: #ff6b35;
+            margin-bottom: 0.3rem;
+        }
+
+        .component-name {
+            font-size: 0.7rem;
+            color: rgba(255,255,255,0.7);
+        }
+
+        .component-desc {
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .modal-price {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #ff6b35;
+            margin: 1rem 0;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .modal-buy-btn {
+            flex: 1;
+            padding: 0.8rem;
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            border: none;
+            border-radius: 30px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #1a1a2e;
+            border-left: 4px solid #ff6b35;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            z-index: 2100;
+            color: white;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: rgba(255,255,255,0.4);
+            border-top: 1px solid rgba(255,107,53,0.1);
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 900px) {
+            .main-container {
+                grid-template-columns: 1fr;
+            }
+            .filters-sidebar {
+                position: static;
+            }
+            .cart-sidebar {
+                width: 100%;
+            }
+            .modal-body {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo"><i class="fas fa-microchip"></i> FJ COMPUTER</a>
+            <div class="nav-links">
+                <a href="index.html" data-key="navHome">TRANG CHỦ</a>
+                <a href="sanpham.html" class="active" data-key="navProducts">SẢN PHẨM</a>
+                <a href="thanhvien.html" data-key="navTeam">THÀNH VIÊN</a>
+                <a href="lienhe.html" data-key="navContact">LIÊN HỆ</a>
+                <div class="cart-icon" onclick="toggleCart()">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count" id="cartCount">0</span>
+                </div>
+                <div class="lang-switcher">
+                    <span class="lang-flag" id="currentFlag">🇻🇳</span>
+                    <span class="lang-text" id="currentLangText">VI</span>
+                    <i class="fas fa-chevron-down" style="font-size: 10px;"></i>
+                    <div class="lang-dropdown">
+                        <div class="lang-option" onclick="switchLanguage('vi')"><span>🇻🇳</span><span>Tiếng Việt</span></div>
+                        <div class="lang-option" onclick="switchLanguage('en')"><span>🇬🇧</span><span>English</span></div>
+                    </div>
+                </div>
+                <div class="avatar-btn" id="avatarBtn" onclick="window.location.href='login.html'">
+                    <span id="avatarText">👤</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h3 data-key="yourCart"><i class="fas fa-shopping-bag"></i> Giỏ hàng</h3>
+            <i class="fas fa-times" onclick="toggleCart()" style="cursor:pointer;"></i>
+        </div>
+        <div class="cart-items" id="cartItems"></div>
+        <div class="cart-footer">
+            <div class="cart-total" id="cartTotal" data-key="total">Tổng: 0đ</div>
+            <button class="add-to-cart" onclick="checkout()" data-key="checkoutBtn">Thanh toán</button>
+        </div>
+    </div>
+
+    <div id="productModal" class="product-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Chi Tiết Sản Phẩm</h2>
+                <i class="fas fa-times close-modal" onclick="closeModal()"></i>
+            </div>
+            <div class="modal-body" id="modalBody"></div>
+        </div>
+    </div>
+
+    <div class="page-header">
+        <h1>🔥 <span data-key="pageTitle">Sản Phẩm Gaming</span> 🔥</h1>
+        <p data-key="pageDesc">Laptop Gaming cao cấp | PC Gaming mạnh mẽ | Linh kiện chính hãng</p>
+    </div>
+
+    <div class="main-container">
+        <aside class="filters-sidebar">
+            <div class="filter-section">
+                <h3 data-key="categoryTitle"><i class="fas fa-laptop"></i> Danh mục</h3>
+                <div class="filter-category">
+                    <label><input type="checkbox" value="laptop" onchange="filterProducts()"> <span data-key="catLaptop">Laptop Gaming</span></label>
+                    <label><input type="checkbox" value="pc" onchange="filterProducts()"> <span data-key="catPC">PC Gaming</span></label>
+                    <label><input type="checkbox" value="accessory" onchange="filterProducts()"> <span data-key="catAccessory">Phụ kiện Gaming</span></label>
+                </div>
+            </div>
+            <div class="filter-section">
+                <h3 data-key="brandTitle"><i class="fas fa-tag"></i> Hãng</h3>
+                <div class="filter-category">
+                    <label><input type="checkbox" value="asus" onchange="filterProducts()"> ASUS ROG</label>
+                    <label><input type="checkbox" value="msi" onchange="filterProducts()"> MSI</label>
+                    <label><input type="checkbox" value="acer" onchange="filterProducts()"> Acer Predator</label>
+                    <label><input type="checkbox" value="lenovo" onchange="filterProducts()"> Lenovo Legion</label>
+                    <label><input type="checkbox" value="fpc" onchange="filterProducts()"> FJ Custom PC</label>
+                </div>
+            </div>
+            <div class="filter-section">
+                <h3 data-key="priceTitle"><i class="fas fa-dollar-sign"></i> Khoảng giá</h3>
+                <div class="price-range">
+                    <div class="price-inputs">
+                        <input type="number" id="minPrice" placeholder="Từ (VNĐ)" onchange="filterProducts()">
+                        <input type="number" id="maxPrice" placeholder="Đến (VNĐ)" onchange="filterProducts()">
+                    </div>
+                </div>
+            </div>
+            <button class="filter-btn" onclick="resetFilters()" data-key="resetBtn"><i class="fas fa-undo-alt"></i> Đặt lại bộ lọc</button>
+        </aside>
+
+        <main>
+            <div class="products-header">
+                <div class="products-count" id="productsCount">Hiển thị 0 sản phẩm</div>
+                <select class="sort-select" id="sortSelect" onchange="filterProducts()">
+                    <option value="default" data-key="sortDefault">Sắp xếp theo</option>
+                    <option value="price_asc" data-key="sortPriceAsc">Giá tăng dần</option>
+                    <option value="price_desc" data-key="sortPriceDesc">Giá giảm dần</option>
+                    <option value="name_asc" data-key="sortNameAsc">Tên A-Z</option>
+                </select>
+            </div>
+            <div class="products-grid" id="productsGrid"></div>
+        </main>
+    </div>
+
+    <footer>
+        <p data-key="footerText">© 2025 FJ COMPUTER - Địa chỉ tin cậy cho game thủ Việt</p>
+    </footer>
+
+    <script>
+        // ========== LANGUAGE DATA ==========
+        const translations = {
+            vi: {
+                navHome: "TRANG CHỦ",
+                navProducts: "SẢN PHẨM",
+                navContact: "LIÊN HỆ",
+                navTeam: "THÀNH VIÊN",
+                pageTitle: "Sản Phẩm Gaming",
+                pageDesc: "Laptop Gaming cao cấp | PC Gaming mạnh mẽ | Linh kiện chính hãng",
+                categoryTitle: "Danh mục",
+                brandTitle: "Hãng",
+                priceTitle: "Khoảng giá",
+                resetBtn: "Đặt lại bộ lọc",
+                sortDefault: "Sắp xếp theo",
+                sortPriceAsc: "Giá tăng dần",
+                sortPriceDesc: "Giá giảm dần",
+                sortNameAsc: "Tên A-Z",
+                yourCart: "Giỏ hàng",
+                total: "Tổng:",
+                checkoutBtn: "Thanh toán",
+                footerText: "© 2025 FJ COMPUTER - Địa chỉ tin cậy cho game thủ Việt",
+                catLaptop: "Laptop Gaming",
+                catPC: "PC Gaming",
+                catAccessory: "Phụ kiện Gaming",
+                addToCart: "Thêm vào giỏ",
+                cartEmpty: "Giỏ hàng trống",
+                loginRequired: "Vui lòng đăng nhập!",
+                orderSuccess: "Đặt hàng thành công! +{points} điểm thưởng"
+            },
+            en: {
+                navHome: "HOME",
+                navProducts: "PRODUCTS",
+                navContact: "CONTACT",
+                navTeam: "TEAM",
+                pageTitle: "Gaming Products",
+                pageDesc: "Premium Laptop Gaming | Powerful PC Gaming | Official Accessories",
+                categoryTitle: "Category",
+                brandTitle: "Brand",
+                priceTitle: "Price Range",
+                resetBtn: "Reset Filters",
+                sortDefault: "Sort by",
+                sortPriceAsc: "Price: Low to High",
+                sortPriceDesc: "Price: High to Low",
+                sortNameAsc: "Name A-Z",
+                yourCart: "Your Cart",
+                total: "Total:",
+                checkoutBtn: "Checkout",
+                footerText: "© 2025 FJ COMPUTER - Trusted destination for Vietnamese gamers",
+                catLaptop: "Gaming Laptop",
+                catPC: "Gaming PC",
+                catAccessory: "Gaming Accessories",
+                addToCart: "Add to Cart",
+                cartEmpty: "Cart is empty",
+                loginRequired: "Please login!",
+                orderSuccess: "Order placed successfully! +{points} bonus points"
+            }
+        };
+
+        // Product Database
+        const products = [
+            { id: 1, name: "ASUS ROG Strix G18", category: "laptop", brand: "asus", specs: "Intel i9-13980HX | RTX 4090 | 32GB DDR5 | 2TB SSD | 18' QHD 240Hz", price: 69990000, oldPrice: 79990000, image: "data:image/jpeg;base64,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", badge: "HOT",
+              cpu: "Intel Core i9-13980HX (24 nhân, 32 luồng, up to 5.6GHz)", gpu: "NVIDIA GeForce RTX 4090 16GB GDDR6", ram: "32GB DDR5 5600MHz (2x16GB)", storage: "2TB NVMe PCIe 4.0 SSD", display: "18 inch QHD+ (2560x1600), 240Hz, 3ms, IPS, 500 nits",
+              description: "Laptop gaming mạnh mẽ nhất của ASUS với thiết kế đột phá, tản nhiệt 3 quạt và sử dụng công nghệ Liquid Metal giúp máy hoạt động mát mẻ ngay cả khi chơi game nặng." },
+            { id: 2, name: "MSI Titan GT77 HX", category: "laptop", brand: "msi", specs: "Intel i9-13980HX | RTX 4090 | 64GB DDR5 | 4TB SSD | 17.3' 4K 144Hz", price: 89990000, oldPrice: 99990000, image: "data:image/jpeg;base64,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evAniIQcpljKc1smfaLRIZJnaXHUNTWgYNaNQC1mMXT94OU/N0vQVUcBcpD+7p+ZriggmjUsrR/rBTXeZlHzdaPZv61UcEMo+brR7ORBFMbq1a9qysjUmOCWUfN9p9nIrxwVyj5vtPs5OpBGiNZmxhbw4LZR832n2cnUrhwYyj5vtPs5OpBqNiCvEQW13tZR832n2cnUq97mUfsFp9nJ1INcRBVzQWfveyj9gtPspepO9/KPm+0+yl6kGAxBWmILY7gZR832n2UvUqHIGUfN1p9lN1INYxClNXEsb4vdo2LcOQcpebrT7GXqVp4P5S83Wn2MqDRkZU1JJPGcT0rC9m1SJ4OZS832n2Mqp3s5SP8Ad9o9jIgg54RVa7ouvcdRXRu4I5SP932jnieP+ax95eVD/d8/qFB6B2NuymRcseUJMPFjtbvcyY/B/rcZ9kBriNC+XYuAWVHGhsEwrsA/qcAOcr37sdZInsdghs9oPyrb3g3r9xt43WXtg1DAVoMAg6VERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQf/Z", badge: "Premium",
+              cpu: "Intel Core i9-13980HX (24 nhân, 32 luồng, up to 5.6GHz)", gpu: "NVIDIA GeForce RTX 4090 16GB GDDR6", ram: "64GB DDR5 5600MHz (4x16GB)", storage: "4TB NVMe PCIe 4.0 SSD (2x2TB RAID 0)", display: "17.3 inch 4K UHD (3840x2160), 144Hz, Mini-LED, 1000 nits",
+              description: "Chiếc laptop mạnh nhất thế giới hiện tại, được trang bị cơ chế tản nhiệt độc quyền với 4 quạt và 8 ống đồng, đáp ứng mọi tựa game AAA ở cài đặt cao nhất." },
+            { id: 3, name: "FJ Titan X9", category: "pc", brand: "fpc", specs: "Intel i9-14900K | RTX 4090 | 64GB DDR5 | 2TB NVMe | Liquid Cooled", price: 65990000, oldPrice: 75990000, image: "https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=400", badge: "Flagship",
+              cpu: "Intel Core i9-14900K (24 nhân, 32 luồng, up to 6.0GHz) - Tản nhiệt nước 360mm", gpu: "NVIDIA GeForce RTX 4090 24GB GDDR6X", ram: "64GB DDR5 6000MHz RGB (2x32GB)", storage: "2TB Samsung 990 Pro NVMe SSD + 2TB HDD", display: null,
+              description: "PC Gaming siêu cấp của FJ Computer, được build thủ công bởi đội ngũ kỹ thuật giàu kinh nghiệm. Sử dụng linh kiện cao cấp nhất, case RGB, nguồn 1000W Gold, đáp ứng mọi nhu cầu gaming, render, AI." },
+            { id: 4, name: "FJ Phantom G5", category: "pc", brand: "fpc", specs: "Intel i7-14700K | RTX 4080 | 32GB DDR5 | 1TB NVMe | RGB Case", price: 45990000, oldPrice: 52990000, image: "https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?w=400", badge: "Best Seller",
+              cpu: "Intel Core i7-14700K (20 nhân, 28 luồng, up to 5.6GHz) - Tản nhiệt khí cao cấp", gpu: "NVIDIA GeForce RTX 4080 16GB GDDR6X", ram: "32GB DDR5 6000MHz (2x16GB)", storage: "1TB Kingston KC3000 NVMe SSD", display: null,
+              description: "PC Gaming tầm trung cao cấp, cân bằng giữa hiệu năng và giá thành. Phù hợp cho game thủ chuyên nghiệp và streamer, chơi mượt mọi tựa game ở độ phân giải 2K-4K." },
+            { id: 5, name: "Bàn phím cơ ROG Azoth", category: "accessory", brand: "asus", specs: "75% | Switch NX Red | OLED | Hot-swappable | Wireless", price: 4990000, oldPrice: 5990000, image: "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=400", badge: "New",
+              cpu: null, gpu: null, ram: null, storage: null, display: null,
+              description: "Bàn phím cơ cao cấp với màn hình OLED tùy chỉnh, công nghệ switch hot-swappable, kết nối không dây tốc độ cao, pin 2000mAh. Thiết kế 75% tiết kiệm diện tích bàn làm việc." }
+        ];
+
+        let cart = [];
+        let currentUser = null;
+        let currentLang = localStorage.getItem('language') || 'vi';
+        let currentFilters = { categories: [], brands: [], minPrice: null, maxPrice: null, sort: 'default' };
+
+        // ========== LANGUAGE FUNCTIONS ==========
+        function switchLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('language', lang);
+            
+            document.querySelectorAll('[data-key]').forEach(el => {
+                const key = el.getAttribute('data-key');
+                if (translations[lang][key]) {
+                    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                        el.placeholder = translations[lang][key];
+                    } else if (el.tagName === 'OPTION') {
+                        el.textContent = translations[lang][key];
+                    } else {
+                        el.textContent = translations[lang][key];
+                    }
+                }
+            });
+            
+            const currentFlag = document.getElementById('currentFlag');
+            const currentLangText = document.getElementById('currentLangText');
+            if (lang === 'vi') {
+                currentFlag.textContent = '🇻🇳';
+                currentLangText.textContent = 'VI';
+            } else {
+                currentFlag.textContent = '🇬🇧';
+                currentLangText.textContent = 'EN';
+            }
+            
+            filterProducts();
+            showToast(translations[lang].pageDesc, 'success');
+        }
+
+        // ========== PRODUCT FUNCTIONS ==========
+        function filterProducts() {
+            let filtered = [...products];
+            
+            const selectedCategories = Array.from(document.querySelectorAll('.filter-category input[type="checkbox"]'))
+                .filter(cb => cb.checked).map(cb => cb.value);
+            
+            const brandSection = document.querySelectorAll('.filter-section')[1];
+            const selectedBrands = Array.from(brandSection?.querySelectorAll('input:checked') || []).map(cb => cb.value);
+            
+            const minPrice = parseInt(document.getElementById('minPrice').value) || 0;
+            const maxPrice = parseInt(document.getElementById('maxPrice').value) || Infinity;
+            const sort = document.getElementById('sortSelect').value;
+            
+            if (selectedCategories.length > 0) filtered = filtered.filter(p => selectedCategories.includes(p.category));
+            if (selectedBrands.length > 0) filtered = filtered.filter(p => selectedBrands.includes(p.brand));
+            filtered = filtered.filter(p => p.price >= minPrice && p.price <= maxPrice);
+            
+            if (sort === 'price_asc') filtered.sort((a,b) => a.price - b.price);
+            if (sort === 'price_desc') filtered.sort((a,b) => b.price - a.price);
+            if (sort === 'name_asc') filtered.sort((a,b) => a.name.localeCompare(b.name));
+            
+            document.getElementById('productsCount').innerHTML = `Hiển thị ${filtered.length} sản phẩm`;
+            displayProducts(filtered);
+        }
+
+        function displayProducts(productsToShow) {
+            const grid = document.getElementById('productsGrid');
+            grid.innerHTML = productsToShow.map(p => `
+                <div class="product-card" onclick="showProductDetail(${p.id})">
+                    <div style="position: relative;">
+                        ${p.badge ? `<div class="product-badge">${p.badge}</div>` : ''}
+                        <img src="${p.image}" class="product-image">
+                    </div>
+                    <div class="product-info">
+                        <div class="product-category">${p.category === 'laptop' ? '💻 LAPTOP' : p.category === 'pc' ? '🖥️ PC' : '🎮 ACCESSORY'}</div>
+                        <div class="product-name">${p.name}</div>
+                        <div class="product-specs">${p.specs}</div>
+                        <div class="product-price">
+                            ${p.price.toLocaleString('vi-VN')}đ
+                            ${p.oldPrice ? `<span class="old-price">${p.oldPrice.toLocaleString('vi-VN')}đ</span>` : ''}
+                        </div>
+                        <button class="add-to-cart" onclick="event.stopPropagation(); addToCart(${p.id})">${translations[currentLang].addToCart}</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function showProductDetail(id) {
+            const product = products.find(p => p.id === id);
+            if (!product) return;
+
+            document.getElementById('modalTitle').textContent = product.name;
+            
+            let componentsHtml = '';
+            if (product.category === 'laptop' || product.category === 'pc') {
+                componentsHtml = `
+                    <div class="component-section">
+                        <div class="component-title"><i class="fas fa-microchip"></i> ${currentLang === 'vi' ? 'LINH KIỆN BÊN TRONG' : 'INTERNAL COMPONENTS'}</div>
+                        <div class="component-grid">
+                            <div class="component-item"><i class="fas fa-microchip"></i><div class="component-name">CPU</div><div class="component-desc">${product.cpu || 'Intel Core'}</div></div>
+                            <div class="component-item"><i class="fas fa-tv"></i><div class="component-name">GPU</div><div class="component-desc">${product.gpu || 'NVIDIA RTX'}</div></div>
+                            <div class="component-item"><i class="fas fa-memory"></i><div class="component-name">RAM</div><div class="component-desc">${product.ram || '32GB DDR5'}</div></div>
+                            <div class="component-item"><i class="fas fa-hdd"></i><div class="component-name">SSD</div><div class="component-desc">${product.storage || '1TB NVMe'}</div></div>
+                            ${product.display ? `<div class="component-item"><i class="fas fa-desktop"></i><div class="component-name">${currentLang === 'vi' ? 'MÀN HÌNH' : 'DISPLAY'}</div><div class="component-desc">${product.display}</div></div>` : ''}
+                        </div>
+                    </div>
+                `;
+            }
+
+            document.getElementById('modalBody').innerHTML = `
+                <div class="modal-image"><img src="${product.image}" alt="${product.name}"></div>
+                <div class="modal-info">
+                    <h3>📋 ${currentLang === 'vi' ? 'CẤU HÌNH CHI TIẾT' : 'DETAILED SPECS'}</h3>
+                    <ul class="spec-list">
+                        <li><span class="spec-icon"><i class="fas fa-tag"></i></span><span>${product.category === 'laptop' ? '💻 Laptop Gaming' : product.category === 'pc' ? '🖥️ PC Gaming' : '🎮 Phụ kiện'}</span></li>
+                        <li><span class="spec-icon"><i class="fas fa-microchip"></i></span><span>${product.specs}</span></li>
+                        ${product.oldPrice ? `<li><span class="spec-icon"><i class="fas fa-percent"></i></span><span>${currentLang === 'vi' ? 'Tiết kiệm' : 'Save'}: ${(product.oldPrice - product.price).toLocaleString('vi-VN')}đ (${Math.round((product.oldPrice - product.price)/product.oldPrice*100)}%)</span></li>` : ''}
+                    </ul>
+                    ${componentsHtml}
+                    <div class="component-section">
+                        <div class="component-title"><i class="fas fa-info-circle"></i> ${currentLang === 'vi' ? 'GIỚI THIỆU' : 'INTRODUCTION'}</div>
+                        <p style="color: rgba(255,255,255,0.7); line-height: 1.6;">${product.description}</p>
+                    </div>
+                    <div class="modal-price">${product.price.toLocaleString('vi-VN')}đ</div>
+                    <div class="modal-buttons">
+                        <button class="modal-buy-btn" onclick="addToCartAndClose(${product.id})"><i class="fas fa-cart-plus"></i> ${translations[currentLang].addToCart}</button>
+                        <button class="modal-buy-btn" style="background: linear-gradient(135deg, #f7931e, #ff6b35);" onclick="buyNow(${product.id})"><i class="fas fa-bolt"></i> ${currentLang === 'vi' ? 'Mua ngay' : 'Buy now'}</button>
+                    </div>
+                </div>
+            `;
+            document.getElementById('productModal').classList.add('active');
+        }
+
+        function closeModal() { document.getElementById('productModal').classList.remove('active'); }
+        function addToCartAndClose(id) { addToCart(id); closeModal(); }
+        function buyNow(id) { addToCart(id); closeModal(); checkout(); }
+
+        function resetFilters() {
+            document.querySelectorAll('.filter-category input').forEach(cb => cb.checked = false);
+            document.getElementById('minPrice').value = '';
+            document.getElementById('maxPrice').value = '';
+            document.getElementById('sortSelect').value = 'default';
+            filterProducts();
+            showToast(currentLang === 'vi' ? "Đã đặt lại bộ lọc!" : "Filters reset!", "success");
+        }
+
+        function addToCart(id) {
+            if (!currentUser) { 
+                showToast(translations[currentLang].loginRequired, 'error'); 
+                window.location.href = 'login.html'; 
+                return; 
+            }
+            const product = products.find(p => p.id === id);
+            const existing = cart.find(i => i.id === id);
+            if (existing) existing.quantity++; else cart.push({ ...product, quantity: 1 });
+            updateCartUI(); saveCart(); 
+            showToast(`Đã thêm ${product.name} vào giỏ!`, "success");
+        }
+
+        function updateCartUI() {
+            const cartDiv = document.getElementById('cartItems');
+            const totalQty = cart.reduce((s, i) => s + i.quantity, 0);
+            document.getElementById('cartCount').innerText = totalQty;
+            if (cart.length === 0) { 
+                cartDiv.innerHTML = `<p style="text-align:center;padding:2rem;">${translations[currentLang].cartEmpty}</p>`; 
+                document.getElementById('cartTotal').innerHTML = `${translations[currentLang].total} 0đ`; 
+                return; 
+            }
+            cartDiv.innerHTML = cart.map(item => `
+                <div style="display:flex;gap:1rem;padding:1rem;background:rgba(255,255,255,0.05);border-radius:12px;margin-bottom:1rem;">
+                    <img src="${item.image}" style="width:70px;height:70px;object-fit:cover;border-radius:10px;">
+                    <div style="flex:1;">
+                        <div style="font-weight:600;">${item.name}</div>
+                        <div style="color:#ff6b35;">${(item.price * item.quantity).toLocaleString('vi-VN')}đ</div>
+                        <div><button onclick="updateQty(${item.id},-1)">-</button> ${item.quantity} <button onclick="updateQty(${item.id},1)">+</button></div>
+                    </div>
+                </div>
+            `).join('');
+            const total = cart.reduce((s, i) => s + (i.price * i.quantity), 0);
+            document.getElementById('cartTotal').innerHTML = `${translations[currentLang].total} ${total.toLocaleString('vi-VN')}đ`;
+        }
+
+        function updateQty(id, delta) { 
+            const idx = cart.findIndex(i => i.id === id); 
+            if (idx !== -1) { 
+                cart[idx].quantity += delta; 
+                if (cart[idx].quantity <= 0) cart.splice(idx, 1); 
+                updateCartUI(); 
+                saveCart(); 
+            } 
+        }
+
+        function saveCart() { 
+            if (currentUser) { 
+                currentUser.cart = cart; 
+                localStorage.setItem('currentUser', JSON.stringify(currentUser)); 
+            } 
+        }
+
+        function checkout() { 
+            if (!currentUser) { 
+                showToast(translations[currentLang].loginRequired, 'error'); 
+                window.location.href = 'login.html'; 
+                return; 
+            }
+            if (cart.length === 0) { 
+                showToast(translations[currentLang].cartEmpty, 'error'); 
+                return; 
+            }
+            localStorage.setItem('checkoutCart', JSON.stringify(cart));
+            window.location.href = 'thanhtoan.html';
+        }
+
+        function toggleCart() { document.getElementById('cartSidebar').classList.toggle('open'); }
+        function showToast(msg, type) { 
+            const t = document.createElement('div'); 
+            t.className = 'toast'; 
+            t.innerHTML = `<i class="fas ${type==='success'?'fa-check-circle':'fa-exclamation-circle'}" style="margin-right:10px;"></i>${msg}`; 
+            document.body.appendChild(t); 
+            setTimeout(()=>t.remove(),3000); 
+        }
+
+        // Load user
+        const savedUser = localStorage.getItem('currentUser');
+        if (savedUser) { 
+            try { 
+                currentUser = JSON.parse(savedUser); 
+                cart = currentUser.cart || []; 
+                updateCartUI(); 
+                document.getElementById('avatarText').innerHTML = currentUser.username.charAt(0).toUpperCase(); 
+            } catch(e) {} 
+        }
+        
+        // Initialize
+        displayProducts(products);
+        document.getElementById('productsCount').innerHTML = `Hiển thị ${products.length} sản phẩm`;
+        switchLanguage(currentLang);
+    </script>
+</body>
+</html>

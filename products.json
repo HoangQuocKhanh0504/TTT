@@ -1,0 +1,68 @@
+[
+  {
+    "id": 1,
+    "name": "FJ Titan X9",
+    "category": "Gaming PC",
+    "price": 45990000,
+    "oldPrice": 55990000,
+    "image": "https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=500",
+    "specs": "Intel i9-14900K | RTX 4090 | 64GB DDR5 | 2TB NVMe",
+    "badge": "Limited Edition",
+    "rating": 5
+  },
+  {
+    "id": 2,
+    "name": "FJ Phantom G5",
+    "category": "Gaming Laptop",
+    "price": 32990000,
+    "oldPrice": 39990000,
+    "image": "https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=500",
+    "specs": "Intel i7-14700HX | RTX 4070 | 32GB RAM | 1TB SSD",
+    "badge": "Bestseller",
+    "rating": 4.9
+  },
+  {
+    "id": 3,
+    "name": "FJ Spectra W8",
+    "category": "Workstation",
+    "price": 52990000,
+    "oldPrice": 64990000,
+    "image": "https://images.unsplash.com/photo-1587831990711-23ca6441447b?w=500",
+    "specs": "AMD Ryzen 9 7950X | RTX 4080 | 128GB RAM | 4TB SSD",
+    "badge": "Pro",
+    "rating": 4.8
+  },
+  {
+    "id": 4,
+    "name": "FJ Aether Z7",
+    "category": "Ultrabook",
+    "price": 24990000,
+    "oldPrice": 29990000,
+    "image": "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=500",
+    "specs": "Intel Ultra 7 | 32GB RAM | 1TB SSD | OLED 4K",
+    "badge": "New",
+    "rating": 4.7
+  },
+  {
+    "id": 5,
+    "name": "FJ Chronos V3",
+    "category": "Mini PC",
+    "price": 18990000,
+    "oldPrice": 22990000,
+    "image": "https://images.unsplash.com/photo-1593640408182-31c70c8268f5?w=500",
+    "specs": "Ryzen 7 7840U | 32GB RAM | 1TB SSD | Compact Design",
+    "badge": "Compact",
+    "rating": 4.6
+  },
+  {
+    "id": 6,
+    "name": "FJ Helios X3",
+    "category": "Gaming PC",
+    "price": 35990000,
+    "oldPrice": 41990000,
+    "image": "https://images.unsplash.com/photo-1587202372634-32705e3b49f4?w=500",
+    "specs": "Intel i7-14700K | RTX 4070 Ti | 32GB RAM | 2TB SSD",
+    "badge": "Hot",
+    "rating": 4.9
+  }
+]

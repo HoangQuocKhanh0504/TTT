@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thành Viên Nhóm | FJ COMPUTER</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: #000000;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* 3D Canvas Background */
+        #canvas-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(20px);
+            border-radius: 80px;
+            z-index: 1000;
+            padding: 0.8rem 2rem;
+            border: 1px solid rgba(255,107,35,0.3);
+            transition: all 0.3s;
+        }
+
+        .navbar.scrolled {
+            top: 0;
+            left: 0;
+            right: 0;
+            border-radius: 0;
+            background: rgba(0, 0, 0, 0.95);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.3s;
+            font-size: 14px;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: #ff6b35;
+        }
+
+        .cart-icon {
+            position: relative;
+            cursor: pointer;
+            font-size: 22px;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -10px;
+            right: -12px;
+            background: #ff6b35;
+            color: white;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 20px;
+        }
+
+        /* Language Switcher */
+        .lang-switcher {
+            position: relative;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.05);
+            padding: 8px 14px;
+            border-radius: 40px;
+            transition: 0.3s;
+            border: 1px solid rgba(255,107,35,0.3);
+        }
+
+        .lang-switcher:hover {
+            background: rgba(255,107,35,0.2);
+            border-color: #ff6b35;
+        }
+
+        .lang-flag {
+            font-size: 18px;
+        }
+
+        .lang-text {
+            font-size: 13px;
+            font-weight: 600;
+            color: white;
+        }
+
+        .lang-dropdown {
+            position: absolute;
+            top: 50px;
+            right: 0;
+            background: rgba(10, 15, 26, 0.98);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            border: 1px solid rgba(255,107,35,0.3);
+            overflow: hidden;
+            min-width: 140px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s;
+            z-index: 100;
+        }
+
+        .lang-switcher:hover .lang-dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .lang-option {
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+            color: rgba(255,255,255,0.8);
+        }
+
+        .lang-option:hover {
+            background: rgba(255,107,35,0.2);
+            color: #ff6b35;
+        }
+
+        .avatar-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+
+        /* Team Section */
+        .team-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 1;
+            padding: 8rem 2rem 4rem;
+        }
+
+        .team-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .team-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .team-header h1 {
+            font-size: 3rem;
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .team-header p {
+            color: rgba(255,255,255,0.5);
+            font-size: 1.1rem;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+
+        .member-card {
+            background: rgba(255,255,255,0.03);
+            border-radius: 32px;
+            overflow: hidden;
+            border: 1px solid rgba(255,107,35,0.2);
+            transition: all 0.4s;
+            backdrop-filter: blur(10px);
+        }
+
+        .member-card:hover {
+            transform: translateY(-10px);
+            border-color: #ff6b35;
+            box-shadow: 0 20px 40px rgba(255,107,35,0.2);
+        }
+
+        .member-header {
+            position: relative;
+            height: 280px;
+            overflow: hidden;
+        }
+
+        .member-avatar {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .member-card:hover .member-avatar {
+            transform: scale(1.05);
+        }
+
+        .member-role {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            z-index: 2;
+        }
+
+        .member-info {
+            padding: 1.8rem;
+            text-align: center;
+        }
+
+        .member-name {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .member-title {
+            color: #ff6b35;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+            letter-spacing: 1px;
+        }
+
+        .member-desc {
+            color: rgba(255,255,255,0.6);
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin-bottom: 1.5rem;
+        }
+
+        .member-skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .skill-tag {
+            background: rgba(255,107,53,0.15);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            color: #ff6b35;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+            color: white;
+            text-decoration: none;
+        }
+
+        .social-link:hover {
+            background: #ff6b35;
+            transform: translateY(-3px);
+        }
+
+        /* Quote Section */
+        .quote-section {
+            margin-top: 4rem;
+            padding: 2rem;
+            background: linear-gradient(135deg, rgba(255,107,53,0.1), rgba(247,147,30,0.05));
+            border-radius: 32px;
+            text-align: center;
+            border: 1px solid rgba(255,107,35,0.2);
+        }
+
+        .quote-icon {
+            font-size: 48px;
+            color: #ff6b35;
+            margin-bottom: 1rem;
+        }
+
+        .quote-text {
+            font-size: 1.2rem;
+            font-style: italic;
+            color: rgba(255,255,255,0.8);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .quote-author {
+            margin-top: 1rem;
+            color: rgba(255,255,255,0.5);
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: rgba(255,255,255,0.4);
+            border-top: 1px solid rgba(255,107,53,0.1);
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Highlight for leader */
+        .member-card.leader {
+            border-color: #ff6b35;
+            box-shadow: 0 0 30px rgba(255,107,35,0.2);
+        }
+
+        @media (max-width: 768px) {
+            .team-header h1 {
+                font-size: 2rem;
+            }
+            .member-name {
+                font-size: 1.4rem;
+            }
+            .team-section {
+                padding: 6rem 1rem 2rem;
+            }
+            .nav-links a:not(.lang-switcher):not(.avatar-btn) {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas-bg"></canvas>
+
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo"><i class="fas fa-microchip"></i> FJ COMPUTER</a>
+            <div class="nav-links">
+                <a href="index.html" data-key="navHome">TRANG CHỦ</a>
+                <a href="sanpham.html" data-key="navProducts">SẢN PHẨM</a>
+                <a href="thanhvien.html" class="active" data-key="navTeam">THÀNH VIÊN</a>
+                <a href="#" data-key="navGaming">GAMING</a>
+                <a href="lienhe.html" data-key="navContact">LIÊN HỆ</a>
+                <div class="cart-icon" onclick="toggleCart()">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count" id="cartCount">0</span>
+                </div>
+                <div class="lang-switcher">
+                    <span class="lang-flag" id="currentFlag">🇻🇳</span>
+                    <span class="lang-text" id="currentLangText">VI</span>
+                    <i class="fas fa-chevron-down" style="font-size: 10px;"></i>
+                    <div class="lang-dropdown">
+                        <div class="lang-option" onclick="switchLanguage('vi')">
+                            <span>🇻🇳</span>
+                            <span>Tiếng Việt</span>
+                        </div>
+                        <div class="lang-option" onclick="switchLanguage('en')">
+                            <span>🇬🇧</span>
+                            <span>English</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="avatar-btn" id="avatarBtn" onclick="toggleDashboard()">
+                    <span id="avatarText">👤</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Team Section -->
+    <section class="team-section">
+        <div class="team-container">
+            <div class="team-header">
+                <h1 data-key="teamTitle">👥 Đội Ngũ Phát Triển</h1>
+                <p data-key="teamDesc">Những người đứng sau thành công của FJ COMPUTER</p>
+            </div>
+
+            <div class="team-grid">
+                <!-- KPC - Trưởng nhóm / Lead Developer -->
+                <div class="member-card leader">
+                    <div class="member-header">
+                        <img src="https://randomuser.me/api/portraits/men/68.jpg" alt="KPC" class="member-avatar">
+                        <div class="member-role" data-key="roleLeader">👑 Trưởng nhóm</div>
+                    </div>
+                    <div class="member-info">
+                        <div class="member-name">KPC</div>
+                        <div class="member-title" data-key="titleKPC">⚡ Lead Developer & Điều hành</div>
+                        <div class="member-desc" data-key="descKPC">
+                            Trưởng nhóm dự án, người code chính toàn bộ web, điều hành và quản lý kỹ thuật. 
+                            Đảm bảo hệ thống hoạt động ổn định và phát triển các tính năng.
+                        </div>
+                        <div class="member-skills">
+                            <span class="skill-tag">Fullstack Development</span>
+                            <span class="skill-tag">Project Management</span>
+                            <span class="skill-tag">System Architecture</span>
+                            <span class="skill-tag">DevOps</span>
+                        </div>
+                        <div class="social-links">
+                            <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+                            <a href="#" class="social-link"><i class="fab fa-stack-overflow"></i></a>
+                            <a href="#" class="social-link"><i class="fab fa-dev"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cyber - UI/UX & Ý tưởng -->
+                <div class="member-card">
+                    <div class="member-header">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Cyber" class="member-avatar">
+                        <div class="member-role" data-key="roleDesigner">🎨 Designer</div>
+                    </div>
+                    <div class="member-info">
+                        <div class="member-name">Cyber</div>
+                        <div class="member-title" data-key="titleCyber">🎨 UI/UX Designer & Ý tưởng</div>
+                        <div class="member-desc" data-key="descCyber">
+                            Người khởi xướng dự án, lên ý tưởng và thiết kế giao diện. 
+                            Đảm bảo trải nghiệm người dùng tốt nhất và tầm nhìn sản phẩm.
+                        </div>
+                        <div class="member-skills">
+                            <span class="skill-tag">UI/UX Design</span>
+                            <span class="skill-tag">Idea Generation</span>
+                            <span class="skill-tag">Project Planning</span>
+                            <span class="skill-tag">Figma</span>
+                        </div>
+                        <div class="social-links">
+                            <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+                            <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Danke - Hình ảnh & Góp ý -->
+                <div class="member-card">
+                    <div class="member-header">
+                        <img src="https://randomuser.me/api/portraits/men/45.jpg" alt="Danke" class="member-avatar">
+                        <div class="member-role" data-key="roleMedia">📸 Media & QA</div>
+                    </div>
+                    <div class="member-info">
+                        <div class="member-name">Danke</div>
+                        <div class="member-title" data-key="titleDanke">🖼️ Visual Content & Feedback</div>
+                        <div class="member-desc" data-key="descDanke">
+                            Chuyên gia hình ảnh, chọn lọc và tối ưu nội dung visual. 
+                            Đóng góp ý kiến cải thiện sản phẩm và trải nghiệm người dùng.
+                        </div>
+                        <div class="member-skills">
+                            <span class="skill-tag">Photography</span>
+                            <span class="skill-tag">Video Editing</span>
+                            <span class="skill-tag">QA Testing</span>
+                            <span class="skill-tag">Content Curation</span>
+                        </div>
+                        <div class="social-links">
+                            <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                            <a href="#" class="social-link"><i class="fab fa-behance"></i></a>
+                            <a href="#" class="social-link"><i class="fab fa-dribbble"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quote Section -->
+            <div class="quote-section">
+                <div class="quote-icon">
+                    <i class="fas fa-quote-right"></i>
+                </div>
+                <div class="quote-text" data-key="quote">
+                    "Chúng tôi không chỉ xây dựng một website, chúng tôi tạo ra trải nghiệm 
+                    gaming đỉnh cao cho cộng đồng game thủ Việt Nam."
+                </div>
+                <div class="quote-author">— FJ COMPUTER Team (Led by KPC)</div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p data-key="footerText">© 2025 FJ COMPUTER - Được phát triển bởi KPC (Trưởng nhóm), Cyber & Danke</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        // ========== LANGUAGE DATA ==========
+        const translations = {
+            vi: {
+                navHome: "TRANG CHỦ",
+                navProducts: "SẢN PHẨM",
+                navContact: "LIÊN HỆ",
+                navTeam: "THÀNH VIÊN",
+                navGaming: "GAMING",
+                teamTitle: "👥 Đội Ngũ Phát Triển",
+                teamDesc: "Những người đứng sau thành công của FJ COMPUTER",
+                roleLeader: "👑 Trưởng nhóm",
+                roleDesigner: "🎨 Designer",
+                roleMedia: "📸 Media & QA",
+                titleKPC: "⚡ Lead Developer & Điều hành",
+                titleCyber: "🎨 UI/UX Designer & Ý tưởng",
+                titleDanke: "🖼️ Visual Content & Feedback",
+                descKPC: "Trưởng nhóm dự án, người code chính toàn bộ web, điều hành và quản lý kỹ thuật. Đảm bảo hệ thống hoạt động ổn định và phát triển các tính năng.",
+                descCyber: "Người khởi xướng dự án, lên ý tưởng và thiết kế giao diện. Đảm bảo trải nghiệm người dùng tốt nhất và tầm nhìn sản phẩm.",
+                descDanke: "Chuyên gia hình ảnh, chọn lọc và tối ưu nội dung visual. Đóng góp ý kiến cải thiện sản phẩm và trải nghiệm người dùng.",
+                quote: '"Chúng tôi không chỉ xây dựng một website, chúng tôi tạo ra trải nghiệm gaming đỉnh cao cho cộng đồng game thủ Việt Nam."',
+                footerText: "© 2025 FJ COMPUTER - Được phát triển bởi KPC (Trưởng nhóm), Cyber & Danke"
+            },
+            en: {
+                navHome: "HOME",
+                navProducts: "PRODUCTS",
+                navContact: "CONTACT",
+                navTeam: "TEAM",
+                navGaming: "GAMING",
+                teamTitle: "👥 Development Team",
+                teamDesc: "The people behind FJ COMPUTER's success",
+                roleLeader: "👑 Team Leader",
+                roleDesigner: "🎨 Designer",
+                roleMedia: "📸 Media & QA",
+                titleKPC: "⚡ Lead Developer & Operations",
+                titleCyber: "🎨 UI/UX Designer & Ideator",
+                titleDanke: "🖼️ Visual Content & Feedback",
+                descKPC: "Project leader, main coder of the entire website, operator and technical manager. Ensures system stability and feature development.",
+                descCyber: "Project initiator, idea generator, and interface designer. Ensures the best user experience and product vision.",
+                descDanke: "Image specialist, selects and optimizes visual content. Contributes feedback to improve product and user experience.",
+                quote: '"We don\'t just build a website, we create a premium gaming experience for the Vietnamese gaming community."',
+                footerText: "© 2025 FJ COMPUTER - Developed by KPC (Team Leader), Cyber & Danke"
+            }
+        };
+
+        let currentLang = localStorage.getItem('language') || 'vi';
+        let currentUser = null;
+
+        function switchLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('language', lang);
+            
+            document.querySelectorAll('[data-key]').forEach(el => {
+                const key = el.getAttribute('data-key');
+                if (translations[lang][key]) {
+                    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                        el.placeholder = translations[lang][key];
+                    } else {
+                        el.textContent = translations[lang][key];
+                    }
+                }
+            });
+            
+            const currentFlag = document.getElementById('currentFlag');
+            const currentLangText = document.getElementById('currentLangText');
+            if (lang === 'vi') {
+                currentFlag.textContent = '🇻🇳';
+                currentLangText.textContent = 'VI';
+            } else {
+                currentFlag.textContent = '🇬🇧';
+                currentLangText.textContent = 'EN';
+            }
+        }
+
+        function toggleCart() { alert("Vui lòng quay lại trang chủ để xem giỏ hàng!"); }
+        function toggleDashboard() { window.location.href = 'login.html'; }
+
+        // Load user
+        const savedUser = localStorage.getItem('currentUser');
+        if (savedUser) {
+            try {
+                currentUser = JSON.parse(savedUser);
+                document.getElementById('avatarText').innerHTML = currentUser.username.charAt(0).toUpperCase();
+            } catch(e) {}
+        }
+
+        // Load language
+        const savedLang = localStorage.getItem('language');
+        switchLanguage(savedLang || 'vi');
+
+        // Three.js Background
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('canvas-bg'), alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        camera.position.z = 30;
+        
+        const particlesGeometry = new THREE.BufferGeometry();
+        const particlesCount = 1500;
+        const posArray = new Float32Array(particlesCount * 3);
+        for(let i = 0; i < particlesCount * 3; i += 3) {
+            posArray[i] = (Math.random() - 0.5) * 200;
+            posArray[i+1] = (Math.random() - 0.5) * 100;
+            posArray[i+2] = (Math.random() - 0.5) * 100;
+        }
+        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+        const particlesMaterial = new THREE.PointsMaterial({ size: 0.15, color: 0xff6b35, transparent: true, opacity: 0.5, blending: THREE.AdditiveBlending });
+        const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+        scene.add(particlesMesh);
+        
+        function animate() {
+            requestAnimationFrame(animate);
+            particlesMesh.rotation.y += 0.002;
+            particlesMesh.rotation.x += 0.001;
+            renderer.render(scene, camera);
+        }
+        animate();
+        
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+        
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) navbar.classList.add('scrolled');
+            else navbar.classList.remove('scrolled');
+        });
+    </script>
+</body>
+</html>
