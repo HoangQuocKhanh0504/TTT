@@ -1863,8 +1863,23 @@
             window.location.href = 'thanhtoan.html';
         }
 
-        function viewOrders() { showToast('Order history feature coming soon!', 'success'); }
-        function viewWishlist() { showToast('Wishlist feature coming soon!', 'success'); }
+        function viewOrders() {
+    if (!currentUser) {
+        showToast(translations[currentLang].signIn, 'error');
+        openAuthModal();
+        return;
+    }
+    window.location.href = 'lichsudonhang.html';
+}
+
+function viewWishlist() {
+    if (!currentUser) {
+        showToast(translations[currentLang].signIn, 'error');
+        openAuthModal();
+        return;
+    }
+    window.location.href = 'yeuthich.html';
+}
         function showToast(message, type) { const toast = document.createElement('div'); toast.className = 'toast'; toast.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}" style="margin-right: 10px;"></i>${message}`; document.body.appendChild(toast); setTimeout(() => toast.remove(), 3000); }
 
         function switchLanguage(lang) {
